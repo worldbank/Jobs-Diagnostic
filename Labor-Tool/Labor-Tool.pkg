@@ -1,0 +1,12 @@
+v 1
+d LM-Toolkit - A package to automate labor marker supply side analysis in Stata using I2D2/GLD/GMD harmonised datasets.
+d Authors: Jörg Langbein and Michael Weber, World Bank
+d Support: mweber1@worldbank.org
+d
+d Distribution-Date: 20211230
+
+f Diagnostic.ado
+f Figures.ado
+f Indicator.ado
+f Prepare.ado
+f Regressions.ado
