@@ -1,3 +1,3 @@
 v 3
 d Author: Jörg Langbein and Michael Weber, World Bank
-p LM-Toolkit:  A package to automate labor marker supply side analysis in Stata using I2D2/GLD/GMD harmonised datasets.
+p Jobs Diagnostic Labor Tool:  A package to automate labor force survey analysis in Stata using I2D2/GLD/GMD harmonised datasets.
