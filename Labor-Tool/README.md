@@ -1,11 +1,11 @@
 # Jobs Diagnostic Labor Tool
 A package to automate labor force survey analysis using the World Bank's I2D2/GLD/GMD harmonized datasets. 
 
-- [Background](https://github.com/JoergLangbein/LM-Toolkit/blob/main/README.md#Background)
-- [Install](https://github.com/JoergLangbein/LM-Toolkit/blob/main/README.md#Install)
-- [FAQ](https://github.com/JoergLangbein/LM-Toolkit/blob/main/README.md#FAQ)
-- [Citation](https://github.com/JoergLangbein/LM-Toolkit/blob/main/README.md#Citation)
-- [Changelog](https://github.com/JoergLangbein/LM-Toolkit/blob/main/README.md#Changelog)
+- [Background](https://github.com/worldbank/Jobs-Diagnostic/tree/main/Labor-Tool/README.md#Background)
+- [Install](https://github.com/worldbank/Jobs-Diagnostic/tree/main/Labor-Tool/README.md#Install)
+- [FAQ](https://github.com/worldbank/Jobs-Diagnostic/tree/main/Labor-Tool/README.md#FAQ)
+- [Citation](https://github.com/worldbank/Jobs-Diagnostic/tree/main/Labor-Tool/README.md#Citation)
+- [Changelog](https://github.com/worldbank/Jobs-Diagnostic/tree/main/Labor-Tool/README.md#Changelog)
 
 # Background
 The Jobs Diagnostic Labor Tool (JDLT) provides standardized labor force survey analysis using the World Bank's I2D2/GLD/GMD harmonized datasets. It helps users conduct a Jobs Diagnostic [guided enquiry](https://openknowledge.worldbank.org/bitstream/handle/10986/33491/Theoretical-Underpinnings-of-Jobs-Diagnostics.pdf?sequence=1&isAllowed=y) focusing on the labor market supply side and its respective outcomes. The outputs of the tool present key labor market information ranging from labor force participation rates, types of employment, and unemployment to labor market outcomes for different population groups. The populations groups are automatically disaggregated by gender, area, age, and education. The tool processes nationally representative and harmonized surveys (World Bank I2D2, GLD, or GMD) and presents its results through indicators, figures, and regression tables, to better understand how a country's economy affects employment levels and workers. The results of the analysis are presented for each survey and over time in case of several surveys. A benchmarking between surveys from different countries is also possible. For further information on the results and their intepretation, please see the [FAQ](https://github.com/JoergLangbein/LM-Toolkit/blob/main/README.md#FAQ). 
@@ -15,7 +15,7 @@ The Jobs Diagnostic Labor Tool (JDLT) provides standardized labor force survey a
 
 To obtain the latest version through GitHub, from the main window in Stata, run:
 
-net describe LM-Toolkit, from(https://raw.githubusercontent.com/JoergLangbein/LM-Toolkit/master/) 
+net describe LM-Toolkit, from(https://raw.githubusercontent.com/worldbank/Jobs-Diagnostic/tree/main/Labor-Tool/) 
 
 After download, install in Stata the Installation files
 
