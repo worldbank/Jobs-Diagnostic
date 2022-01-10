@@ -13,7 +13,7 @@ level are conducted. Results are, among others, corroborated using statistics pr
 Labour Organization (ILO) or the World Bank’s World Development Indicators (WDI) as well as through
 outlier detection and consistency checks. As a result, JOIN provides only indicators for surveys that
 surpassed a quality check threshold. JOIN contains about 1,430 household surveys conducted in 160
-countries. The results are published in the framework of the World Development Indicators. Further information can be found in the Manual: 
+countries. It is now available as part of the [World Bank’s DataBank](https://databank.worldbank.org/source/global-jobs-indicators-database-(join)).  Further information can be found in the Manual: 
 
 Jörg Langbein and Michael Weber, 2021. Global Jobs Indicators Database (JOIN) Manual: Methodology and Quality Checks, online: https://elibrary.worldbank.org/doi/abs/10.1596/35971
 
