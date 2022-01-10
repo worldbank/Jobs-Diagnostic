@@ -1,5 +1,5 @@
-# Jobs-Diagnostic
-Repository of tools on Jobs Diagnostics.
+# Jobs Diagnostic Repository
+
 
 # What is a Jobs Diagnostic? 
 A jobs diagnostic identifies the core jobs challenges of a country . The diagnostic identifies symptoms, interprets these symptoms, and prioritizes a set of jobs challenges. The central enquiry of the jobs diagnostic is into how a country’s jobs outcomes have changed over time, and specifically, how (and if) people have transitioned into new jobs. Emphasis is placed on how the profile of jobs in the economy is changing, and which types of individuals (by age, gender, education, rural versus urban) get the jobs. It asks structured questions to identify a comprehensive set of symptoms from data, which are then compared to “normal” results from other countries. A more detailed introduction as well as cross-country findings from analysis conducted by World Bank staff working on Jobs Diagnostics can be found [here](https://openknowledge.worldbank.org/handle/10986/30594)
