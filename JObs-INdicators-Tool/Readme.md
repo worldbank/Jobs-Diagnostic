@@ -6,10 +6,15 @@ agreements, and privacy is kept at a high standard.
 
 # How can I access the tool? 
 
-the tool can be based accessed using 
+The tool can be downloaded [here](https://development-data-hub-s3-public.s3.amazonaws.com/ddhfiles/160361/join_benchmarking_tool.zip). 
+Alternatively, it can be accessed from this Github by downloading and combining the zipped JOIN_Benchmarking files as well as the JOIN_Benchmarking_Tool file. 
 
 # How do I use the tool? 
 
 The tool is easy to use and the only thing you will need is Excel. This video shows you how to store your files and conduct an analysis: 
 
 [![Watch the video](Images/Preview.PNG)](https://1930181.mediaspace.kaltura.com/media/Join+Benchmarking+Tool+with+CC/1_tazfpke3/29528271)
+
+
+# Can I add my own surveys to this tool? 
+Yes, this is possible. As long as they follow the I2D2/GMD/GLD normenclatura you can run the do-file in this GitHub to add your own surveys. You will need four other datasets that are stored in the Data folder to successfully run the code. Please save them in one Data folder and then follow the instructions in the do-file. 
