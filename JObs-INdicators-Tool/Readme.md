@@ -8,3 +8,8 @@ agreements, and privacy is kept at a high standard.
 
 the tool can be based accessed using 
 
+# How do I use the tool? 
+
+The tool is easy to use and the only thing you will need is Excel. This video shows you how to store your files and conduct an analysis: 
+
+[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://1930181.mediaspace.kaltura.com/media/Join+Benchmarking+Tool+with+CC/1_tazfpke3/29528271)
