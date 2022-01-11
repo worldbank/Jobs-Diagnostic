@@ -12,4 +12,4 @@ the tool can be based accessed using
 
 The tool is easy to use and the only thing you will need is Excel. This video shows you how to store your files and conduct an analysis: 
 
-[![Watch the video](images/preview.png)](https://1930181.mediaspace.kaltura.com/media/Join+Benchmarking+Tool+with+CC/1_tazfpke3/29528271)
+[![Watch the video](images/Preview.PNG)](https://1930181.mediaspace.kaltura.com/media/Join+Benchmarking+Tool+with+CC/1_tazfpke3/29528271)
