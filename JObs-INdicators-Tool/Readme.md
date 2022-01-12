@@ -16,5 +16,5 @@ The tool is easy to use and the only thing you will need is Excel. This video sh
 [![Watch the video](Images/Preview.PNG)](https://1930181.mediaspace.kaltura.com/media/Join+Benchmarking+Tool+with+CC/1_tazfpke3/29528271)
 
 
-# Can I add my own surveys to this tool? 
-Yes, this is possible. As long as they follow the I2D2/GMD/GLD normenclatura you can run the do-file in this GitHub to add your own surveys. You will need four other datasets that are stored in the Data folder to successfully run the code. Please save them in one Data folder and then follow the instructions in the do-file. 
+# Can I add surveys on my own? 
+Yes, this is possible. The additional household surveys would need to follow the I2D2/GMD/GLD normenclature. With the household surveys in I2D2/GMD/GLD format, you can run the do-file of this GitHub project to process the survey and obtain the input for the JObs-INdicator tool. You will need four other datasets that are stored in the Data folder to successfully run the code. Please save them in one Data folder and then follow the instructions in the do-file. 
