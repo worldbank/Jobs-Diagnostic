@@ -1,5 +1,5 @@
-# Jobs Diagnostic Repository
-Welcome to the Jobs Diagnostic repository. This repository features three tools that were developed by the Job's Group in the World Bank to facilitate Jobs Diagnostics. They are relying on harmonized labor force surveys in either I2D2, GMD or GLD format and allow users to conduct their own Jobs Diagnostic. 
+# Jobs Diagnostic GitHub Project
+Welcome to the Jobs Diagnostic GitHub project. This project features tools to faciliate Jobs Diagnostics developed by the World Bank. The tools are using harmonized labor force surveys in either I2D2, GMD or GLD format and allow users to conduct their own Jobs Diagnostic. 
 
 # What is a Jobs Diagnostic? 
 A jobs diagnostic identifies the core jobs challenges of a country . The diagnostic identifies symptoms, interprets these symptoms, and prioritizes a set of jobs challenges. The central enquiry of the jobs diagnostic is into how a country’s jobs outcomes have changed over time, and specifically, how (and if) people have transitioned into new jobs. Emphasis is placed on how the profile of jobs in the economy is changing, and which types of individuals (by age, gender, education, rural versus urban) get the jobs. It asks structured questions to identify a comprehensive set of symptoms from data, which are then compared to “normal” results from other countries. A more detailed introduction as well as cross-country findings from analysis conducted by World Bank staff working on Jobs Diagnostics can be found [here](https://openknowledge.worldbank.org/handle/10986/30594)
