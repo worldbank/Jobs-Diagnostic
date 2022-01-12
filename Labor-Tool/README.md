@@ -34,6 +34,7 @@ In Stata:
 ## What do I need to do to get started? 
 - type `Diagnostic` and follow the instructions on the screen
 - Tip: If you work in a cloud environment, such as OneDrive, turn it off while running the package. The saving of the figures can stop the calculations.
+- To test whether the code is working you can use the Example Datasets. Those are two datasets of an anonymous countries. Note that the stored country code and year do not reflect the original country in any way but need to be there to ensure a smooth running of the code.  
 
 ## How is the package structured? 
 After setting the global for the country and user, the next step is to prepare the datasets in the data processing folder. In order to do this, simply type `Prepare` and the datasets will undergo checks for quality and consistency before they are appended to one final dataset. Users can then select between three different types of analysis by either typing `Indicator`, `Figures` or `Regressions`.
