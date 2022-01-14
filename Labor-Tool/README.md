@@ -15,7 +15,7 @@ The Jobs Diagnostic Labor Tool (JDLT) provides standardized labor force survey a
 
 To obtain the latest version through GitHub, from the main window in Stata, run:
 
-net describe Labor-Tool, from("https://raw.githubusercontent.com/worldbank/Jobs-Diagnostic/main/Labor-Tool")
+```net describe Labor-Tool, from("https://raw.githubusercontent.com/worldbank/Jobs-Diagnostic/main/Labor-Tool")```
 
 After download, install in Stata the Installation files
 
