@@ -24,9 +24,9 @@ If the download from within Stata fails (e.g. because you are behind a firewall)
 
 # FAQ
 ## How do I setup my computer and Stata?
-On my computer:
+On you computer:
 - Download all Stata scripts from GitHub
-- Store the input data (GLD/GMD/I2D2) in one other folder. There is an exemplary dataset in this GitHub that you can use to test the analysis.
+- Store the input data (GLD/GMD/I2D2) in a separate folder. There is an exemplary dataset in this GitHub that you can use to test the analysis.
 In Stata: 
 - set a global path to the data processing folder that also holds the input data by typing `global user "C:\wb007\JD\Analysis\"`. Do not forget the last backslash.
 - set the country by typing `global y "country"` (e.g. `global y "Vietnam"`). 
