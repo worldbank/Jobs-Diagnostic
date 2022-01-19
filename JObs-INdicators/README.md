@@ -18,7 +18,7 @@ countries. It is now available as part of the [World Bank’s DataBank](https://
 Jörg Langbein and Michael Weber, 2021. Global Jobs Indicators Database (JOIN) Manual: Methodology and Quality Checks, online: https://elibrary.worldbank.org/doi/abs/10.1596/35971
 
 
-# What this GitHub does
+# What is the JOIN GitHub project?
 This GitHub provides users with the do files that are used to generate JOIN. Using I2D2 and GLD data, the user can retrace the creation from its first step, data preparation 
 until the creation of the outputs. More particularly, the codes follows the following steps: 
 
