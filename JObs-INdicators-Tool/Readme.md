@@ -7,7 +7,6 @@ To enable additional analysis, users can customize these pivot tables, for examp
 # How can I access the tool? 
 
 The tool can be downloaded [here](https://development-data-hub-s3-public.s3.amazonaws.com/ddhfiles/160361/join_benchmarking_tool.zip). 
-Alternatively, it can be accessed from this Github by downloading and combining the zipped JOIN_Benchmarking files as well as the JOIN_Benchmarking_Tool file. 
 
 # How do I use the tool? 
 
