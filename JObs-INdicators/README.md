@@ -17,13 +17,28 @@ countries. It is now available as part of the [World Bank’s DataBank](https://
 
 Jörg Langbein and Michael Weber, 2021. Global Jobs Indicators Database (JOIN) Manual: Methodology and Quality Checks, online: https://elibrary.worldbank.org/doi/abs/10.1596/35971
 
+# Background on JOIN
+JOIN provides easily accessible and standardized labor market indicators. Better labor policy  requires an evidence-basedapproach involving high-quality  data. JOIN’s indicators can  be  easily  accessed through  a  central  data repositoryand are commonly  used  in  Jobs Diagnostics,whichallows better insights into the labor marketacross many countries. Indicators of labor force  participation,  sectoral  patterns  of  employment,  occupations,and  wages  are  derived from  a harmonized set  of  household  surveys  and  labor  force  surveys covered  in  the  International Income Distribution Database (I2D2) or the Global Labor Database (GLD). JOIN covers more than 160 countries, particularly in low-and middle-income groups.The current version of JOIN is built using 2,150 surveys totaling about 228 million observations. These surveys come from 164 countries of which 74 percent are low-and middle-income countries. More than 100 indicators are constructed for each survey and further disaggregated by subgroups such as gender, area, education, or age. The jobs indicators  can  be  classified  into six broad categories: information on  the dataset, sociodemographic, labor force and employment, sectors and occupations, working  hours, and  wages, as  well  as  information  on  education. All  indicators  are  weighted  to  be nationally representative. Besides reporting for the overall population, the indicators are also reported for the following subgroups: young (15–24 years) and old (25–64 years) workers, urban population and rural population, females, and males, as well as lower educated (primary education and below) and higher educated (above  primary education). This distinguishes the database explicitly from  other  databases where aggregated labor market indicators are only availableat a national level.
+
+# How is the database constructed?
+First, a repository of harmonized household and labor force surveys is collected for the construction of the database. Although the surveys cover different household survey types, all contain a range of variables that can be harmonized for each individual. Examples are labor force status, age, and employment status. In a second step, the indicators are constructed for each survey. There are 105 indicators constructed within the following sections:
+- Data description, for example, country, survey type, and year of survey
+- Sociodemographic, for example, share of urban population or workers in population
+- Labor  force and  employment,  for  example, labor  force  participation rate, share of  wage workers, or share of informal workers
+- Sectors and occupations, for example,share of workers in agricultural sector, share of craft workers
+- Wages and working  hours, for  example, average working hours, share of underemployed workers, and median earnings
+- Education, for example, share of employees with primary education.
+
+# Data quality checks and filtering
+Different tests are performed on each survey to detect difference swith other data sources, internal coherence of the indicators, realistic values of the data, and missing values in the micro-data. Across years ofthe survey, different  types of  outliers are inspected. To  raise a flag, a comparison of the  result of  the  test to the distribution of results in the database is made,and the results are grouped into five categories, depending on the gravity of the quality issue. In total, 115 quality checks are conducted, each flagging data quality from no or few problems to potentially significant issues in the data. The results from the data quality checks are then used to filter the data. From the 2,185 surveys included at the beginning, 1,430 are eventually included in JOIN. 
+
+
 
 # What is the JOIN GitHub project?
-This GitHub provides users with the do files that are used to generate JOIN. Using I2D2 and GLD data, the user can retrace the creation from its first step, data preparation 
+This GitHub  provides users with the do files that are used to generate JOIN. Using I2D2 and GLD data, the user can retrace the creation from its first step, data preparation 
 until the creation of the outputs. More particularly, the codes follows the following steps: 
 
-1. Data preparation: The first file "Dataset_Preparation" users the surveys already aggregated to a regional level, e.g. MENA region, SSA region etc., cleans the data in case
-needed and constructs the basic variables that are used in the next step. 
+1. Data preparation: The first file "Dataset_Preparation" users the surveys already aggregated to a regional level, e.g. Sub-Saharan Africa, North America region etc., cleans the data in case needed and constructs the basic variables that are used in the next step. 
 
 2. JOIN preparation: The second file "Join_Preparation" constructs all indicator variables that are used in step 3. 
 
