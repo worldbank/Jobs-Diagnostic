@@ -50,8 +50,8 @@ local date : dis %td_CCYYNNDD date(c(current_date), "DMY")
 
 global data "$user\\$y\Data"
 global graph "$user\\$y\JDLT_`date'\"
-global indicators  "$user\$y\JDLT_`date'\Question 1 - Jobs and workers profile"
-global regressions "$user\$y\JDLT_`date'\Question 5 - Worker characteristics and LM outcomes"
+global indicators  "$user\\$y\JDLT_`date'\Question 1 - Jobs and workers profile"
+global regressions "$user\\$y\JDLT_`date'\Question 5 - Worker characteristics and LM outcomes"
 global condALL   age>=15 & age<=64
 global noCondALL age<15 & age>64	
 
