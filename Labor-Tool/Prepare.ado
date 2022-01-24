@@ -26,7 +26,7 @@ quietly {
 * Check folder structure and package availability or install
 
 
-foreach package in datacheck winsor2 confirmdir filelist excelcol mdesc sencode grstyle coefplot estout wbopendata oaxaca{
+foreach package in datacheck winsor2 confirmdir filelist excelcol mdesc sencode grstyle coefplot estout outreg2 wbopendata oaxaca{
  capture which `package'
  if _rc==111 ssc install `package'
 }
