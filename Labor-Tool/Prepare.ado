@@ -450,9 +450,9 @@ cap gen str harmonization=""
 
 replace harmonization = "I2D2" if strpos(sample, "I2D2")>0
 replace harmonization = "GMD"  if strpos(sample, "GMD")>0
+replace harmonization = "GLD"  if strpos(sample, "GLD")>0
 
-
-local I2D2_varlist "ccode urb hhsize atschool lstatus ocusec pci_d firmsize_u sample1 year reg01 head literacy empstat occup pcc contract socialsec healthins soc idh reg02 gender educy nlfreason wage pcc_d internet unempldur idp ownhouse age edulevel1 edulevel2 edulevel3 unempldur_l unitwage njobs internet2 union wgt water marital edulevel2 unempldur_u landphone cellphone pcw_d welfare strata electricity ed_mod_age sample harmonization industry computer reg psu toilet everattend lb_mod_age whours pci firmsize_l restriction" 
+local I2D2_varlist "ccode urb hhsize atschool lstatus ocusec pci_d firmsize_u sample1 year reg01 head literacy empstat occup pcc contract socialsec healthins soc idh reg02 gender educy nlfreason wage pcc_d internet unempldur idp ownhouse age edulevel1 edulevel2 edulevel3 unempldur_l unitwage njobs internet2 union water marital edulevel2 unempldur_u landphone cellphone pcw_d welfare strata electricity ed_mod_age sample harmonization industry computer reg psu toilet everattend lb_mod_age whours pci firmsize_l restriction" 
 
 foreach v of local I2D2_varlist {
                 capture confirm variable `v'
