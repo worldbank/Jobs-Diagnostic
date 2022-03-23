@@ -34,7 +34,7 @@ until the creation of the outputs. More particularly, the codes follows the foll
 
 4. JOIN Missing: The fourth file "Join_Missing" creates the share of missing information for each of the main variables.
 
-In case you have any questions on the code or suggestions, please feel free to get in touch. 
+In case you have any questions on the code or suggestions, please feel free to get in touch.  
 
 
 
