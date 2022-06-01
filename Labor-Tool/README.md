@@ -1,4 +1,4 @@
-# Jobs Diagnostic Labor Tool
+# Jobs Diagnostic Labor Tool 
 A package to automate labor force survey analysis using the World Bank's I2D2/GLD/GMD harmonized datasets.
 
 - [Background](https://github.com/worldbank/Jobs-Diagnostic/tree/main/Labor-Tool/README.md#Background)
