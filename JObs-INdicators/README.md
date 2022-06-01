@@ -22,7 +22,7 @@ First, a repository of harmonized household and labor force surveys is collected
 Different tests are performed on each survey to detect differences with other data sources, internal coherence of the indicators, realistic values of the data, and missing values in the micro-data. Across years of the survey, different  types of  outliers are inspected. To  raise a flag, a comparison of the  result of  the  test to the distribution of results in the database is made, and the results are grouped into five categories, depending on the gravity of the quality issue. In total, 115 quality checks are conducted, each flagging data quality from no or few problems to potentially significant issues in the data. The results from the data quality checks are then used to filter the data. From the 2,185 surveys included at the beginning, 1,430 are eventually included in JOIN. 
 
 
-# What is the JOIN GitHub project?
+# What is the JOIN GitHub project? 
 This GitHub  provides users with the do files that are used to generate JOIN. Using I2D2 and GLD data, the user can retrace the creation from its first step, data preparation 
 until the creation of the outputs. More particularly, the codes follows the following steps: 
 
