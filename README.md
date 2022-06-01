@@ -1,4 +1,4 @@
-# Jobs Diagnostic GitHub Project 
+# Jobs Diagnostic GitHub Project
 Welcome to the Jobs Diagnostic GitHub project. This project features tools to facilitate Jobs Diagnostics developed by the World Bank. The tools use harmonized labor force surveys in either I2D2, GMD, or GLD format and allow users to conduct their own Jobs Diagnostic.
 
 # What is a Jobs Diagnostic? 
