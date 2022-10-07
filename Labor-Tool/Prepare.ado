@@ -454,71 +454,82 @@ replace harmonization = "GLD"  if strpos(sample, "GLD")>0
 ** Recode in case of GMD or GLD surveys		
 		
 if harmonization=="GMD" | harmonization=="GLD" {
-rename weight wgt 
-rename male   gender
-recode gender 0=2
-label define gender 1 "Male" 2 "Female"
-label val gender gender
-rename urban urb
-recode urb 0=2
-label define urb 1 "Urban" 2 "Rural"
-label val urb urb
-
-** Generate Country Code
-gen str ccode=countrycode
-label var ccode "Country Code"
-
-
-** Generate Household ID
-gen idh=hhid
-label var idh "Household ID"
-
-** Household size
-rename hsize hhsize
-
-** Education Level 1
-
-	gen byte edulevel1=educat7
-	label var edulevel1 "Level of education 1"
-	la de lbledulevel1 1 "No education" 2 "Primary incomplete" 3 "Primary complete" 4 "Secondary incomplete" 5 "Secondary complete" 6 "Higher than secondary but not university" 7 "University incomplete or complete" 8 "Other" 9 "Unstated"
-	label values edulevel1 lbledulevel1
 	
-*EDUCATION LEVEL 2
-	gen byte edulevel2=edulevel1
-	recode edulevel2 4=3 5=4 6 7=5 8 9=.
-	replace edulevel2=. if age<ed_mod_age & age!=.
-	label var edulevel2 "Level of education 2"
-	la de lbledulevel2 1 "No education" 2 "Primary incomplete"  3 "Primary complete but secondary incomplete" 4 "Secondary complete" 5 "Some tertiary/post-secondary"
-	label values edulevel2 lbledulevel2
+	** Rename variables
 	
-* EDUCATION LEVEL 3
-	gen byte edulevel3=edulevel1
-	recode edulevel3 2 3=2 4 5=3 6 7=4 8 9=.
-	label var edulevel3 "Level of education 3"
-	la de lbledulevel3 1 "No education" 2 "Primary" 3 "Secondary" 4 "Post-secondary"
-	label values edulevel3 lbledulevel3	
+	* Rename weight
+	rename weight wgt 
 	
-* Industry
+	* Rename male to gender, adapt labels
+	rename male   gender
+	recode gender 0=2
+	label define gender 1 "Male" 2 "Female"
+	label val gender gender
+	
+	* Rename urban to urb, adapt labels
+	rename urban urb
+	recode urb 0=2
+	label define urb 1 "Urban" 2 "Rural"
+	label val urb urb
+	
+	* Rename school to atschool, same labels
+	rename school atschool
 
-	gen industry=industrycat10
-    label var industry "1 digit industry classification"
-	la de lblindustry 1 "Agriculture" 2 "Mining" 3 "Manufacturing" 4 "Public utilities" 5 "Construction"  6 "Commerce" 7 "Transport and Comnunications" 8 "Financial and Business Services" 9 "Public Administration" 10 "Other Services, Unspecified"
-	label values industry lblindustry
-	
-* INDUSTRY 1
-	gen byte industry1=industry
-	recode industry1 (1=1)(2 3 4 5 =2)(6 7 8 9=3)(10=4)
-	replace industry1=. if lstatus!=1
-	label var industry1 "1 digit industry classification (Broad Economic Activities)"
-	la de lblindustry1 1 "Agriculture" 2 "Industry" 3 "Services" 4 "Other"
-	label values industry1 lblindustry1	
-	
-* Wages
+	** Generate Country Code
+	gen str ccode=countrycode
+	label var ccode "Country Code"
 
-   rename wage_no_compen wage
 
-* Regional code
-   rename subnatid1 reg01
+	** Generate Household ID
+	gen idh=hhid
+	label var idh "Household ID"
+
+	** Household size
+	rename hsize hhsize
+
+	** Education Level 1
+
+		gen byte edulevel1=educat7
+		label var edulevel1 "Level of education 1"
+		la de lbledulevel1 1 "No education" 2 "Primary incomplete" 3 "Primary complete" 4 "Secondary incomplete" 5 "Secondary complete" 6 "Higher than secondary but not university" 7 "University incomplete or complete" 8 "Other" 9 "Unstated"
+		label values edulevel1 lbledulevel1
+
+	*EDUCATION LEVEL 2
+		gen byte edulevel2=edulevel1
+		recode edulevel2 4=3 5=4 6 7=5 8 9=.
+		replace edulevel2=. if age<ed_mod_age & age!=.
+		label var edulevel2 "Level of education 2"
+		la de lbledulevel2 1 "No education" 2 "Primary incomplete"  3 "Primary complete but secondary incomplete" 4 "Secondary complete" 5 "Some tertiary/post-secondary"
+		label values edulevel2 lbledulevel2
+
+	* EDUCATION LEVEL 3
+		gen byte edulevel3=edulevel1
+		recode edulevel3 2 3=2 4 5=3 6 7=4 8 9=.
+		label var edulevel3 "Level of education 3"
+		la de lbledulevel3 1 "No education" 2 "Primary" 3 "Secondary" 4 "Post-secondary"
+		label values edulevel3 lbledulevel3	
+
+	* Industry
+
+		gen industry=industrycat10
+	    label var industry "1 digit industry classification"
+		la de lblindustry 1 "Agriculture" 2 "Mining" 3 "Manufacturing" 4 "Public utilities" 5 "Construction"  6 "Commerce" 7 "Transport and Comnunications" 8 "Financial and Business Services" 9 "Public Administration" 10 "Other Services, Unspecified"
+		label values industry lblindustry
+
+	* INDUSTRY 1
+		gen byte industry1=industry
+		recode industry1 (1=1)(2 3 4 5 =2)(6 7 8 9=3)(10=4)
+		replace industry1=. if lstatus!=1
+		label var industry1 "1 digit industry classification (Broad Economic Activities)"
+		la de lblindustry1 1 "Agriculture" 2 "Industry" 3 "Services" 4 "Other"
+		label values industry1 lblindustry1	
+
+	* Wages
+
+	   rename wage_no_compen wage
+
+	* Regional code
+	   rename subnatid1 reg01
 	
 }
 
