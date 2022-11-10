@@ -151,9 +151,30 @@ label var earnings_people_hourly "Sum of number of respondents used for hourly e
 gen  earnings_people_monthly=1 if earnings_monthly_usd!=. 
 label var earnings_people_monthly "Sum of number of respondents used for monthly earnings calculation, age 15-64"
 
-gen country_sample=sample1
-replace country_sample = subinstr(country_sample, ".dta", "", .)
-replace country_sample = subinstr(country_sample, "_i2d2", "", .)
+** - Process for country_sample --*
+* Create country sample variable, clean it to have only survey info, no file or other info
+gen country_sample = sample1
+
+* Now differentiate between I2D2 and GLD / GMD cases
+gen cs_type = .
+replace cs_type = 1 if regexm(country_sample, "_GLD|_GMD")
+replace cs_type = 2 if regexm(country_sample, "_i2d2|_I2D2")
+
+* Drop dta at the end (once as it should be in there only once)
+replace country_sample = subinstr(country_sample, ".dta", "", 1)
+
+* Find in CCC_YYYY_SURV_V0#_M_V0#_A_[GLD/GMD]_...
+* the string where "_A_" begins, keep anything before
+gen cs_glmd_pos = strpos(country_sample, "_A_") if cs_type == 1
+replace country_sample = substr(country_sample, 1, cs_glmd_pos + 1) if cs_type == 1
+
+* Use process as was for I2D2, expand it
+replace country_sample = subinstr(country_sample, "_i2d2", "", .) if cs_type == 2
+replace country_sample = subinstr(country_sample, "_i2d2_", "_", 1) if cs_type == 2
+replace country_sample = subinstr(country_sample, "_I2D2_", "_", 1) if cs_type == 2
+
+drop cs_type cs_glmd_pos
+* End process for country_sample
 
 label var country_sample "Sample Description"
 
