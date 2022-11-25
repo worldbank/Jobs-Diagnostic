@@ -26,7 +26,7 @@ Different tests are performed on each survey to detect differences with other da
 This GitHub  provides users with the do files that are used to generate JOIN. Using I2D2 and GLD data, the user can retrace the creation from its first step, data preparation 
 until the creation of the outputs. More particularly, the codes follows the following steps: 
 
-1. Data preparation: The first file "Dataset_Preparation" users the surveys already aggregated to a regional level, e.g. Sub-Saharan Africa, North America region etc., cleans the data in case needed and constructs the basic variables that are used in the next step. 
+1. Data preparation: The first file "Dataset_Preparation" uses the surveys already aggregated to a regional level, e.g. Sub-Saharan Africa, North America region etc., cleans the data in case needed and constructs the basic variables that are used in the next step. 
 
 2. JOIN preparation: The second file "Join_Preparation" constructs all indicator variables that are used in step 3. 
 
