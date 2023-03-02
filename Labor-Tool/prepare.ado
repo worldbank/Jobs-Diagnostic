@@ -518,6 +518,8 @@ rename hsize hhsize
    rename wage_no_compen wage
 
 * Regional code
+   sencode subnatid1, replace
+   sencode subnatid2, replace
    rename subnatid1 reg01
 	
 }
@@ -542,7 +544,12 @@ foreach v of local I2D2_varlist {
 
 ** Reduce to key variables		
 keep ccode year idh idp wgt strata psu urb gender harmonization hhsize atschool lstatus ocusec pci_d firmsize_u sample1 reg01 head literacy empstat occup pcc contract socialsec healthins soc idh reg02 educy nlfreason wage pcc_d internet unempldur ownhouse age edulevel1 edulevel2 edulevel3 unempldur_l unitwage njobs internet2 union water marital unempldur_u landphone cellphone pcw_d welfare electricity ed_mod_age sample industry computer toilet everattend lb_mod_age whours pci firmsize_l restriction			
-		
+
+loc mydropvars educat_orig industry_orig occup_orig industry_orig_2 occup_orig_2 occup_orig_year occup_orig_year_2 industry_orig_year_2 industry_orig_year_2 psu subnatid3 strata
+
+	foreach var of local mydropvars{
+		capture drop `var'
+	}
 		
 save "$data\I2D2_test_$y.dta", replace
 *****
