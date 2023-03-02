@@ -930,27 +930,6 @@ bys year sample: gen drop_empstat1=1 if empstat1_missing_ > 0.998
 drop if drop_empstat1==1
 
 
-* if empstat does not have any unpaid workers or less than 0.5% in employed
-bys year sample: egen empstat2_missing_ = mean(empstat2_missing)
-tab year sample if empstat2_missing_ > 0.998
-
-bys year sample: gen drop_empstat2=1 if empstat2_missing_ > 0.998 
-*not necessary see above: && ~missing(empstat2_missing_)
-
-drop if drop_empstat2==1
-
-
-* if empstat does not have any employers or less than 0.5% in employed
-bys year sample: egen empstat3_missing_=mean(empstat3_missing)
-tab year sample if empstat3_missing_>0.998
-
-bys year sample: gen drop_empstat3=1 if empstat3_missing_ > 0.998 
-*not necessary see above: & ~missing(empstat3_missing_)
-
-
-drop if drop_empstat3==1
-
-
 * if empstat does not have any self employed or less than 0.5% in employed
 bys year sample: egen empstat4_missing_=mean(empstat4_missing)
 tab year sample if empstat4_missing_ > 0.998
