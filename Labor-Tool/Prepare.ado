@@ -465,15 +465,18 @@ replace harmonization = "GLD"  if strpos(sample, "GLD")>0
 ** Recode in case of GMD or GLD surveys		
 		
 if harmonization=="GMD" | harmonization=="GLD" {
-rename weight wgt 
-rename male   gender
-recode gender 0=2
+
+* Rename variables 
+cap rename weight wgt
+cap rename weight_h wgt
+cap rename male gender
+cap recode gender 0=2
 label define gender 1 "Male" 2 "Female"
-label val gender gender
-rename urban urb
-recode urb 0=2
+cap label val gender gender
+cap rename urban urb
+cap recode urb 0=2
 label define urb 1 "Urban" 2 "Rural"
-label val urb urb
+cap label val urb urb
 
 ** Generate Country Code
 gen str ccode=countrycode
@@ -485,54 +488,54 @@ gen idh=hhid
 label var idh "Household ID"
 
 ** Household size
-rename hsize hhsize
+cap rename hsize hhsize
 
 ** Education Level 1
 
-	gen byte edulevel1=educat7
-	label var edulevel1 "Level of education 1"
+	cap gen byte edulevel1=educat7
+	cap label var edulevel1 "Level of education 1"
 	la de lbledulevel1 1 "No education" 2 "Primary incomplete" 3 "Primary complete" 4 "Secondary incomplete" 5 "Secondary complete" 6 "Higher than secondary but not university" 7 "University incomplete or complete" 8 "Other" 9 "Unstated"
-	label values edulevel1 lbledulevel1
+	cap label values edulevel1 lbledulevel1
 	
 *EDUCATION LEVEL 2
-	gen byte edulevel2=edulevel1
-	recode edulevel2 4=3 5=4 6 7=5 8 9=.
-	replace edulevel2=. if age<ed_mod_age & age!=.
-	label var edulevel2 "Level of education 2"
+	cap gen byte edulevel2=edulevel1
+	cap recode edulevel2 4=3 5=4 6 7=5 8 9=.
+	cap replace edulevel2=. if age<ed_mod_age & age!=.
+	cap label var edulevel2 "Level of education 2"
 	la de lbledulevel2 1 "No education" 2 "Primary incomplete"  3 "Primary complete but secondary incomplete" 4 "Secondary complete" 5 "Some tertiary/post-secondary"
-	label values edulevel2 lbledulevel2
+	cap label values edulevel2 lbledulevel2
 	
 * EDUCATION LEVEL 3
-	gen byte edulevel3=edulevel1
-	recode edulevel3 2 3=2 4 5=3 6 7=4 8 9=.
-	label var edulevel3 "Level of education 3"
-	la de lbledulevel3 1 "No education" 2 "Primary" 3 "Secondary" 4 "Post-secondary"
-	label values edulevel3 lbledulevel3	
+	cap gen byte edulevel3=edulevel1
+	cap recode edulevel3 2 3=2 4 5=3 6 7=4 8 9=.
+	cap label var edulevel3 "Level of education 3"
+	cap la de lbledulevel3 1 "No education" 2 "Primary" 3 "Secondary" 4 "Post-secondary"
+	cap label values edulevel3 lbledulevel3	
 	
 * Industry
 
-	gen industry=industrycat10
-    label var industry "1 digit industry classification"
-	la de lblindustry 1 "Agriculture" 2 "Mining" 3 "Manufacturing" 4 "Public utilities" 5 "Construction"  6 "Commerce" 7 "Transport and Comnunications" 8 "Financial and Business Services" 9 "Public Administration" 10 "Other Services, Unspecified"
-	label values industry lblindustry
+	cap gen industry=industrycat10
+    	cap label var industry "1 digit industry classification"
+	cap la de lblindustry 1 "Agriculture" 2 "Mining" 3 "Manufacturing" 4 "Public utilities" 5 "Construction"  6 "Commerce" 7 "Transport and Comnunications" 8 "Financial and Business Services" 9 "Public Administration" 10 "Other Services, Unspecified"
+	cap label values industry lblindustry
 	
 * INDUSTRY 1
-	gen byte industry1=industry
-	recode industry1 (1=1)(2 3 4 5 =2)(6 7 8 9=3)(10=4)
-	replace industry1=. if lstatus!=1
-	label var industry1 "1 digit industry classification (Broad Economic Activities)"
-	la de lblindustry1 1 "Agriculture" 2 "Industry" 3 "Services" 4 "Other"
-	label values industry1 lblindustry1	
+	cap gen byte industry1=industry
+	cap recode industry1 (1=1)(2 3 4 5 =2)(6 7 8 9=3)(10=4)
+	cap replace industry1=. if lstatus!=1
+	cap label var industry1 "1 digit industry classification (Broad Economic Activities)"
+	cap la de lblindustry1 1 "Agriculture" 2 "Industry" 3 "Services" 4 "Other"
+	cap label values industry1 lblindustry1	
 	
 * Wages
 
-   rename wage_no_compen wage
+   cap rename wage_no_compen wage
 
 * Regional code
    capture drop subnatid3 	
-   sencode subnatid1, replace
-   sencode subnatid2, replace
-   rename subnatid1 reg01
+   cap sencode subnatid1, replace
+   cap sencode subnatid2, replace
+   cap rename subnatid1 reg01
 	
 }
 
