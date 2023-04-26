@@ -639,10 +639,10 @@ rename _contra marital_missing
 datacheck urb < ., by(year sample) varshow(age gender edulevel1 sample) message(Missing Urban) flag nolist
 rename _contra urb_missing
 
-datacheck reg01 < ., by(year sample) varshow(age gender edulevel1 sample) message(Missing Region 1) flag nolist
+datacheck !missing(reg01), by(year sample) varshow(age gender edulevel1 sample) message(Missing Region 1) flag nolist
 rename _contra reg01_missing
 
-datacheck reg02 < ., by(year sample) varshow(age gender edulevel1 sample) message(Missing Region 2) flag nolist
+datacheck !missing(reg02), by(year sample) varshow(age gender edulevel1 sample) message(Missing Region 2) flag nolist
 rename _contra reg02_missing
 
 
