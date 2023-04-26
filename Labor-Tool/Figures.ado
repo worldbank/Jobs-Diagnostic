@@ -58,7 +58,7 @@ keep if year==`lev'
 
 *** Variable Preparation
 
-bys year: egen nonmissing_reg=count(reg01)
+bys year: egen nonmissing_reg=count(reg01_original)
 bys year: egen nonmissing_OLF=count(OLF)
 bys year: egen nonmissing_urb=count(urb)
 bys year: egen nonmissing_empl=count(employed)
@@ -213,7 +213,7 @@ else {
 
 if nonmissing_edu!=0 & nonmissing_reg!=0 {
 
-	graph bar (sum) counter [pw=wgt] if age_x<3 & nonmissing_edu!=0, percentages over(edulevelSEL) over(reg01, label(labsize(vsmall) angle(45))) ///
+	graph bar (sum) counter [pw=wgt] if age_x<3 & nonmissing_edu!=0, percentages over(edulevelSEL) over(reg01_original, label(labsize(vsmall) angle(45))) ///
 	asyvars stack legend(size(vsmall) colfirst) ytitle("")  blabel(bar, position(center) size(vsmall) format(%3.1f))  ///
 	graphregion(color(white)) title("Highest level of education completed across regions ", size (medium)) 
 	graph export "$Q34\01_B_2_Education_regions_`lev'.png", replace
