@@ -1504,15 +1504,27 @@ di "reg01 variable don't have missing values"
 
 drop nonmissing_reg*
 
-capture decode reg01, g(region)
-
-capture bys region: egen region_size = count(wgt)
-
-capture sencode region, g(regionn) label(regionval) gsort(-region_size)
-
-capture rename reg01 reg01_original
-
-capture rename regionn reg01
+* Deal with reg01 if numeric, labelled
+cap confirm numeric variable reg01
+if _rc == 0 { // it is indeed numeric
+	
+	capture decode reg01, g(region)
+	capture bys region: egen region_size = count(wgt)
+	capture sencode region, g(regionn) label(regionval) gsort(-region_size)
+	capture rename reg01 reg01_original
+	capture rename regionn reg01
+	
+}
+else { // it is string
+	
+	* Extract region name from code
+	capture gen region = regexs(2) if regexm(reg01, "(^[0-9]+[ ]*-[ ]*)([a-zA-Z ]+)")
+	capture bys region: egen region_size = count(wgt)
+	capture sencode region, g(regionn) label(regionval) gsort(-region_size)
+	capture rename reg01 reg01_original
+	capture rename regionn reg01
+	
+}
 
 
 **
