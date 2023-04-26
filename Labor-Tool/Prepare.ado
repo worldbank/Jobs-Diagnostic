@@ -442,7 +442,7 @@ save tst_data, replace
 
 file read myfile line
 while r(eof)==0 { /* while you're not at the end of the file */
-	append using `line'
+	append using `line', force
 	capture replace sample1="`line'" if sample1==""
 	file read myfile line
 }
