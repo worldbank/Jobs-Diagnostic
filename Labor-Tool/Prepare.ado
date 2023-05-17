@@ -498,17 +498,32 @@ cap rename hsize hhsize
 	cap label values edulevel1 lbledulevel1
 	
 *EDUCATION LEVEL 2
+cap des educat5
+if _rc == 0 { // educat5 exists
 	cap gen byte edulevel2=educat5
-	cap replace edulevel2=. if age<ed_mod_age & age!=.
-	cap label var edulevel2 "Level of education 2"
-	la de lbledulevel2 1 "No education" 2 "Primary incomplete"  3 "Primary complete but secondary incomplete" 4 "Secondary complete" 5 "Some tertiary/post-secondary"
-	cap label values edulevel2 lbledulevel2
-	
+}
+else { // there is no educat5, let us try with educat7 (edulevel1)
+	cap gen byte edulevel2=edulevel1
+	cap recode edulevel2 4=3 5=4 6 7=5 8 9=.
+}
+		
+cap label var edulevel2 "Level of education 2"
+cap la de lbledulevel2 1 "No education" 2 "Primary incomplete"  3 "Primary complete but secondary incomplete" 4 "Secondary complete" 5 "Some tertiary/post-secondary"
+cap label values edulevel2 lbledulevel2
+			
 * EDUCATION LEVEL 3
+cap des educat4
+if _rc == 0 { // educat5 exists
 	cap gen byte edulevel3=educat4
-	cap label var edulevel3 "Level of education 3"
-	cap la de lbledulevel3 1 "No education" 2 "Primary" 3 "Secondary" 4 "Post-secondary"
-	cap label values edulevel3 lbledulevel3	
+}
+else { // there is no educat5, let us try with educat7 (edulevel1)
+	cap gen byte edulevel3=edulevel1
+	cap recode edulevel3 2 3=2 4 5=3 6 7=4 8 9=.
+}
+		
+cap label var edulevel3 "Level of education 3"
+cap la de lbledulevel3 1 "No education" 2 "Primary" 3 "Secondary" 4 "Post-secondary"
+cap label values edulevel3 lbledulevel3	
 	
 * Industry
 
