@@ -7,13 +7,15 @@ dis "", _newline(10)
 
 
 
-*--------------------------------*--------------------------------*---------------------------------------
-*-----THIS PROGRAM CREATES TABS and GRAPHS for Jobs Diagnostics Supply Side using I2D2 (Standardized Data)
+*--------------------------------*--------------------------------*--------------------------------*--------------------------------
+*-----THIS PROGRAM CREATES TABS and GRAPHS for Jobs Diagnostics Supply Side using GLD, GMD, and/or I2D2 (Standardized Data)
 
-* Authors: Michael Weber, Jörg Langbein
-* For any questions, please contact: mweber1@worldbank.org
+* Creator: World Bank Jobs Group
+* Authors: Langbein, Jörg; and Weber, Michael
+* Contributors: Fernandez Santos, Angelo Gabrielle; Gronert Alvarez, Mario Andres; and Honorati, Maddalena
 
-*------------------------------*--------------------------------*----------------------------------------
+* For any questions, please contact: jobsdiagnostics@worldbank.org
+*--------------------------------*--------------------------------*--------------------------------*--------------------------------
 
 
 dis "The data is currently being prepared, please wait"
