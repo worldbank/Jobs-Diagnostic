@@ -14,7 +14,7 @@ dis "", _newline(10)
 * Authors: Langbein, Jörg; and Weber, Michael
 * Contributors: Fernandez Santos, Angelo Gabrielle; Gronert Alvarez, Mario Andres; and Honorati, Maddalena
 
-* For any questions, please contact: jobsdiagnostics@worldbank.org
+* For any questions, please contact: jobsccsa@worldbankgroup.org
 *--------------------------------*--------------------------------*--------------------------------*--------------------------------
 
 
