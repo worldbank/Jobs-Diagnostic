@@ -12,7 +12,7 @@ dis "Authors: Langbein, Jörg; and Weber, Michael"
 dis "Contributors: Fernandez Santos, Angelo Gabrielle; Gronert Alvarez, Mario Andres; and Honorati, Maddalena"
 dis ""
 dis "The tool creates Jobs Indicators, Tabulations, Graphs and Regression Output for Jobs Diagnostics Supply Side using I2D2 (Standardized Data)."
-dis "Please register for updates by sending an e-mail to ‘jobsdiagnostics@worldbank.org’." 
+dis "Please register for updates by sending an e-mail to ‘jobsccsa@worldbankgroup.org’." 
 dis "In case you are running the Jobs Diagnostic Supply Side Analysis in a One-Drive folder, please pause the synchronization during runtime."
 dis ""
 
