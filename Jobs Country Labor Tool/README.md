@@ -75,4 +75,5 @@ World Bank Jobs Group, 2023. Jobs Country Labor Tool.
 
 # Changelog
 1.0. Is the version first published on GitHub
+
 1.1. Is the updated version (renaming of tool, other non-code changes)
