@@ -1,0 +1,13 @@
+v 1
+d Jobs Country Labor Tool - A package to automate labor force survey analysis in Stata using GLD/GMD/I2D2 harmonised datasets.
+d Creator: World Bank Jobs Group
+d Authors: Langbein, Jörg; and Weber, Michael
+d Contributors: Fernandez Santos, Angelo Gabrielle; Gronert Alvarez, Mario Andres; and Honorati, Maddalena
+d For any questions, please contact: jobsccsa@worldbankgroup.org
+d Distribution-Date: 20230611
+
+f Diagnostic.ado
+f Figures.ado
+f Indicator.ado
+f Prepare.ado
+f Regressions.ado
