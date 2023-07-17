@@ -18,6 +18,8 @@ quietly {
 set varabbrev off
 
 use "$data/I2D2_test_$y.dta", clear
+count
+local full_sample `r(N)'
 
 *Defining Globals for Each Country Folders:
 
@@ -829,240 +831,246 @@ drop no_contract no_healthins no_socialsec sh_notclass_ sh_missing__  sh_ind_mis
 ************** Urban ************************
 *********************************************
 
-
-keep if urb==1
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen sample_size=.
-label var sample_size "Sample Size"
-
-gen category=.
-label var category "Category"
-
-
-local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
-foreach x in `shares'{
-local l`x' : variable label `x' 
-}
-
-
-collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen category=.
-label var category "Category"
-
-
-
-foreach x in `shares' {
-label var `x' "`l`x''" 
-local varlabel: var label `x'
-}	
-
-gen ratio_gender_gap=wages_female/wages_male
-label var ratio_gender_gap "Female to Male gender wage gap"
-
-gen ratio_sector_gap=wages_public/wages_private
-label var ratio_sector_gap "Public to Private wage gap"
-
-
-putexcel set "$indicators\Indicators_`date'",  sheet(2_Indicators_Disaggregation) modify
-
-
-putexcel A1="Meta-Data"
-putexcel A1:E2, merge hcenter vcenter txtwrap border(all) 
-
-qui putexcel F1="Socio-Demographics"
-qui putexcel F1:O1, merge hcenter vcenter txtwrap border(all) fpattern(solid, yellow)
-
-
-putexcel P1="Labor Force and Employment"
-putexcel P1:AK1, merge hcenter vcenter txtwrap border(all) fpattern(solid, green)
-
-putexcel AL1="Employment composition by sector and occupation"
-putexcel AL1:BI1, merge hcenter vcenter txtwrap border(all) fpattern(solid, orange)
-
-
-putexcel BJ1="Labor Market Outcomes"
-putexcel BJ1:BW1, merge hcenter vcenter txtwrap border(all) fpattern(solid, blue)
-
-putexcel BX1="Education"
-putexcel BX1:CA1, merge hcenter vcenter txtwrap border(all) fpattern(solid, purple)
-
-
-
-putexcel F2="Population"
-putexcel F2:K2, merge hcenter vcenter txtwrap border(all) fpattern(solid, gold)
-
-
-putexcel L2="Working Age"
-putexcel L2:O2, merge hcenter vcenter txtwrap border(all) fpattern(solid, lightyellow )
-
-
-putexcel P2="Labor Force"
-putexcel P2:Y2, merge hcenter vcenter txtwrap border(all) fpattern(solid, lime)
-
-
-putexcel Z2="Employment Type"
-putexcel Z2:AK2, merge hcenter vcenter txtwrap border(all) fpattern(solid, darkgreen)
-
-putexcel AL2="Sector"
-putexcel AL2:AP2, merge hcenter vcenter txtwrap border(all) fpattern(solid, lightsalmon )
-
-putexcel AQ2="Sector, detail"
-putexcel AQ2:AY2, merge hcenter vcenter txtwrap border(all) fpattern(solid, sandybrown)
-
-putexcel AZ2="Occupation"
-putexcel AZ2:BI2, merge hcenter vcenter txtwrap border(all) fpattern(solid, khaki)
-
-putexcel BJ2="Working Hours"
-putexcel BJ2:BL2, merge hcenter vcenter txtwrap border(all) fpattern(solid, turquoise)
-
-putexcel BM2="Earnings"
-putexcel BM2:BW2, merge hcenter vcenter txtwrap border(all) fpattern(solid, aliceblue)
-
-putexcel BX2="Education attainment"
-putexcel BX2:CA2, merge hcenter vcenter txtwrap border(all) fpattern(solid, pink)
-
-
-** 3rd Row Description
-putexcel G3="Share of total Population"
-putexcel G3:J3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, gold)
-
-putexcel V3="Share of all Labor Force Participants, aged 15-64"
-putexcel V3:W3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, lime)
-
-putexcel X3="Share of all Labor Force Participants, aged 15-24"
-putexcel X3:Y3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, lime)
-
-putexcel Z3="Share of all employment types"
-putexcel Z3:AD3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, mediumspringgreen)
-
-putexcel AE3="Share of formal employment"
-putexcel AE3:AK3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, mediumspringgreen)
-
-putexcel AL3="Share of all employed by sectors"
-putexcel AL3:AN3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, lightsalmon)
-
-putexcel AQ3="Share of all employed by detailed sectors, excluding agriculture"
-putexcel AQ3:AY3, merge hcenter  txtwrap bold shrink  border(all) fpattern(solid, sandybrown)
-
-putexcel AZ3="Share of all employed by occupations"
-putexcel AZ3:BI3, merge hcenter  txtwrap bold shrink  border(all) fpattern(solid, khaki)
-
-putexcel BJ3="Share of all employed by working hours"
-putexcel BJ3:BL3, merge hcenter  txtwrap bold shrink  border(all) fpattern(solid, turquoise)
-
-putexcel BX3="Share of working age population"
-putexcel BX3:CA3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, pink)
-
-local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
-
-local excel=1
-
-foreach var in `shares'{
-excelcol `excel' 
-local colname `r(column)'
-local p : variable label `var'
-putexcel `colname'4="`p'", txtwrap overwrite
-local ++excel
-}
-
-
-count
-local y=r(N)
-local row=5			  
-
+* First check if var in data *and* not all missing. If pass: do
+cap count if missing(urb)
+if _rc == 0 & (`r(N)' < `full_sample') {
 	
+	keep if urb==1
 
-tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen sample_size=.
+	label var sample_size "Sample Size"
+
+	gen category=.
+	label var category "Category"
 
 
-forval z=1/`y'	{ 
-matrix define pop`z'=r(Stat`z')
+	local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
+	foreach x in `shares'{
+	local l`x' : variable label `x' 
+	}
+
+
+	collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
+
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen category=.
+	label var category "Category"
+
+
+
+	foreach x in `shares' {
+	label var `x' "`l`x''" 
+	local varlabel: var label `x'
+	}	
+
+	gen ratio_gender_gap=wages_female/wages_male
+	label var ratio_gender_gap "Female to Male gender wage gap"
+
+	gen ratio_sector_gap=wages_public/wages_private
+	label var ratio_sector_gap "Public to Private wage gap"
+
+
+	putexcel set "$indicators\Indicators_`date'",  sheet(2_Indicators_Disaggregation) modify
+
+
+	putexcel A1="Meta-Data"
+	putexcel A1:E2, merge hcenter vcenter txtwrap border(all) 
+
+	qui putexcel F1="Socio-Demographics"
+	qui putexcel F1:O1, merge hcenter vcenter txtwrap border(all) fpattern(solid, yellow)
+
+
+	putexcel P1="Labor Force and Employment"
+	putexcel P1:AK1, merge hcenter vcenter txtwrap border(all) fpattern(solid, green)
+
+	putexcel AL1="Employment composition by sector and occupation"
+	putexcel AL1:BI1, merge hcenter vcenter txtwrap border(all) fpattern(solid, orange)
+
+
+	putexcel BJ1="Labor Market Outcomes"
+	putexcel BJ1:BW1, merge hcenter vcenter txtwrap border(all) fpattern(solid, blue)
+
+	putexcel BX1="Education"
+	putexcel BX1:CA1, merge hcenter vcenter txtwrap border(all) fpattern(solid, purple)
+
+
+
+	putexcel F2="Population"
+	putexcel F2:K2, merge hcenter vcenter txtwrap border(all) fpattern(solid, gold)
+
+
+	putexcel L2="Working Age"
+	putexcel L2:O2, merge hcenter vcenter txtwrap border(all) fpattern(solid, lightyellow )
+
+
+	putexcel P2="Labor Force"
+	putexcel P2:Y2, merge hcenter vcenter txtwrap border(all) fpattern(solid, lime)
+
+
+	putexcel Z2="Employment Type"
+	putexcel Z2:AK2, merge hcenter vcenter txtwrap border(all) fpattern(solid, darkgreen)
+
+	putexcel AL2="Sector"
+	putexcel AL2:AP2, merge hcenter vcenter txtwrap border(all) fpattern(solid, lightsalmon )
+
+	putexcel AQ2="Sector, detail"
+	putexcel AQ2:AY2, merge hcenter vcenter txtwrap border(all) fpattern(solid, sandybrown)
+
+	putexcel AZ2="Occupation"
+	putexcel AZ2:BI2, merge hcenter vcenter txtwrap border(all) fpattern(solid, khaki)
+
+	putexcel BJ2="Working Hours"
+	putexcel BJ2:BL2, merge hcenter vcenter txtwrap border(all) fpattern(solid, turquoise)
+
+	putexcel BM2="Earnings"
+	putexcel BM2:BW2, merge hcenter vcenter txtwrap border(all) fpattern(solid, aliceblue)
+
+	putexcel BX2="Education attainment"
+	putexcel BX2:CA2, merge hcenter vcenter txtwrap border(all) fpattern(solid, pink)
+
+
+	** 3rd Row Description
+	putexcel G3="Share of total Population"
+	putexcel G3:J3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, gold)
+
+	putexcel V3="Share of all Labor Force Participants, aged 15-64"
+	putexcel V3:W3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, lime)
+
+	putexcel X3="Share of all Labor Force Participants, aged 15-24"
+	putexcel X3:Y3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, lime)
+
+	putexcel Z3="Share of all employment types"
+	putexcel Z3:AD3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, mediumspringgreen)
+
+	putexcel AE3="Share of formal employment"
+	putexcel AE3:AK3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, mediumspringgreen)
+
+	putexcel AL3="Share of all employed by sectors"
+	putexcel AL3:AN3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, lightsalmon)
+
+	putexcel AQ3="Share of all employed by detailed sectors, excluding agriculture"
+	putexcel AQ3:AY3, merge hcenter  txtwrap bold shrink  border(all) fpattern(solid, sandybrown)
+
+	putexcel AZ3="Share of all employed by occupations"
+	putexcel AZ3:BI3, merge hcenter  txtwrap bold shrink  border(all) fpattern(solid, khaki)
+
+	putexcel BJ3="Share of all employed by working hours"
+	putexcel BJ3:BL3, merge hcenter  txtwrap bold shrink  border(all) fpattern(solid, turquoise)
+
+	putexcel BX3="Share of working age population"
+	putexcel BX3:CA3, merge hcenter  txtwrap bold shrink border(all) fpattern(solid, pink)
+
+	local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
+
+	local excel=1
+
+	foreach var in `shares'{
+	excelcol `excel' 
+	local colname `r(column)'
+	local p : variable label `var'
+	putexcel `colname'4="`p'", txtwrap overwrite
+	local ++excel
+	}
+
+
+	count
+	local y=r(N)
+	local row=5			  
+
+		
+
+	tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
+
+
+	forval z=1/`y'	{ 
+	matrix define pop`z'=r(Stat`z')
+	}
+
+	tabstat  no_pop_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define pop_no`z'=r(Stat`z')
+	}
+
+	tabstat no_lf_numb, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_no`z'=r(Stat`z')
+	}
+
+
+	tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+
+	tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
+			sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
+			sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
+			sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
+			sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_`z'=r(Stat`z')
+	}
+
+	tabstat mean_hours_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_no`z'=r(Stat`z')
+	}
+
+	tabstat sh_underemp sh_excemp, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_`z'=r(Stat`z')
+	}
+
+	tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wages`z'=r(Stat`z')
+	}
+
+	tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define ratio_`z'=r(Stat`z')
+	}
+
+
+	tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define edu_`z'=r(Stat`z')
+	}
+
+
+
+	forval z=1/`y'	{
+	putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
+	putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
+	putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
+	putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
+	putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
+	putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
+	putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
+	putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
+	putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
+	local ++row
+	}	
+
+	local row=5			  
+
+
+	levels sample1
+	foreach lev in `r(levels)'{
+	use "$data/I2D2_test_${y}_red.dta", clear
+	keep if sample1=="`lev'"
+	putexcel A`row'=countryname
+	putexcel B`row'=year    
+	putexcel C`row'=sample1 
+	putexcel D`row'=sample_type
+	putexcel E`row'="Urban"
+	local ++row
+	}	
+	
 }
 
-tabstat  no_pop_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define pop_no`z'=r(Stat`z')
-}
-
-tabstat no_lf_numb, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_no`z'=r(Stat`z')
-}
-
-
-tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-
-tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
-		sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
-		sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
-		sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
-		sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_`z'=r(Stat`z')
-}
-
-tabstat mean_hours_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_no`z'=r(Stat`z')
-}
-
-tabstat sh_underemp sh_excemp, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_`z'=r(Stat`z')
-}
-
-tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wages`z'=r(Stat`z')
-}
-
-tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
-forval z=1/`y'	{ 
-matrix define ratio_`z'=r(Stat`z')
-}
-
-
-tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
-forval z=1/`y'	{ 
-matrix define edu_`z'=r(Stat`z')
-}
-
-
-
-forval z=1/`y'	{
-putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
-putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
-putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
-putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
-putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
-putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
-putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
-putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
-putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
-local ++row
-}	
-
-local row=5			  
-
-
-levels sample1
-foreach lev in `r(levels)'{
-use "$data/I2D2_test_${y}_red.dta", clear
-keep if sample1=="`lev'"
-putexcel A`row'=countryname
-putexcel B`row'=year    
-putexcel C`row'=sample1 
-putexcel D`row'=sample_type
-putexcel E`row'="Urban"
-local ++row
-}	
 
 restore
 
@@ -1071,144 +1079,146 @@ restore
 ************** Rural ************************
 *********************************************
 
+cap count if missing(urb)
+if _rc == 0 & (`r(N)' < `full_sample') {
+
+	preserve
 
 
-preserve
+	keep if urb==2
 
 
-keep if urb==2
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen category=.
+	label var category "Category"
 
 
-gen sample_type=.
-label var sample_type "Survey Type"
+	local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
+	foreach x in `shares'{
+	local l`x' : variable label `x' 
+	}
 
-gen category=.
-label var category "Category"
+	collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
 
 
-local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
-foreach x in `shares'{
-local l`x' : variable label `x' 
+	gen sub_sample=.
+	label var sub_sample "Sub-Sample"
+
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen ratio_gender_gap=wages_female/wages_male
+	label var ratio_gender_gap "Female to Male gender wage gap"
+
+	gen ratio_sector_gap=wages_public/wages_private
+	label var ratio_sector_gap "Public to Private wage gap"
+
+	gen category=.
+	label var category "Category"
+
+	local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
+
+	local excel=1
+
+
+
+	count
+	local y=r(N)
+	local row=5	+ `y'		  
+
+		
+
+	tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
+
+
+	forval z=1/`y'	{ 
+	matrix define pop`z'=r(Stat`z')
+	}
+
+	tabstat  no_pop_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define pop_no`z'=r(Stat`z')
+	}
+
+	tabstat no_lf_numb, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_no`z'=r(Stat`z')
+	}
+
+
+	tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+
+
+	tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
+			sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
+			sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
+			sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
+			sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_`z'=r(Stat`z')
+	}
+
+	tabstat mean_hours_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_no`z'=r(Stat`z')
+	}
+
+	tabstat sh_underemp sh_excemp, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_`z'=r(Stat`z')
+	}
+
+	tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wages`z'=r(Stat`z')
+	}
+
+	tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define ratio_`z'=r(Stat`z')
+	}
+
+
+	tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define edu_`z'=r(Stat`z')
+	}
+
+
+
+	forval z=1/`y'	{
+	putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
+	putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
+	putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
+	putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
+	putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
+	putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
+	putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
+	putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
+	putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
+	local ++row
+	}	
+
+	local row=5	+ `y'		  
+
+
+	levels sample1
+	foreach lev in `r(levels)'{
+	use "$data/I2D2_test_${y}_red.dta", clear
+	keep if sample1=="`lev'"
+	putexcel A`row'=countryname
+	putexcel B`row'=year    
+	putexcel C`row'=sample1 
+	putexcel D`row'=sample_type
+	putexcel E`row'="Rural"
+	local ++row
+	}	
+
+	restore
+
 }
-
-collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
-
-
-gen sub_sample=.
-label var sub_sample "Sub-Sample"
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen ratio_gender_gap=wages_female/wages_male
-label var ratio_gender_gap "Female to Male gender wage gap"
-
-gen ratio_sector_gap=wages_public/wages_private
-label var ratio_sector_gap "Public to Private wage gap"
-
-gen category=.
-label var category "Category"
-
-local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
-
-local excel=1
-
-
-
-count
-local y=r(N)
-local row=5	+ `y'		  
-
-	
-
-tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
-
-
-forval z=1/`y'	{ 
-matrix define pop`z'=r(Stat`z')
-}
-
-tabstat  no_pop_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define pop_no`z'=r(Stat`z')
-}
-
-tabstat no_lf_numb, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_no`z'=r(Stat`z')
-}
-
-
-tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-
-
-tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
-		sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
-		sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
-		sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
-		sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_`z'=r(Stat`z')
-}
-
-tabstat mean_hours_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_no`z'=r(Stat`z')
-}
-
-tabstat sh_underemp sh_excemp, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_`z'=r(Stat`z')
-}
-
-tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wages`z'=r(Stat`z')
-}
-
-tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
-forval z=1/`y'	{ 
-matrix define ratio_`z'=r(Stat`z')
-}
-
-
-tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
-forval z=1/`y'	{ 
-matrix define edu_`z'=r(Stat`z')
-}
-
-
-
-forval z=1/`y'	{
-putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
-putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
-putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
-putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
-putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
-putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
-putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
-putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
-putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
-local ++row
-}	
-
-local row=5	+ `y'		  
-
-
-levels sample1
-foreach lev in `r(levels)'{
-use "$data/I2D2_test_${y}_red.dta", clear
-keep if sample1=="`lev'"
-putexcel A`row'=countryname
-putexcel B`row'=year    
-putexcel C`row'=sample1 
-putexcel D`row'=sample_type
-putexcel E`row'="Rural"
-local ++row
-}	
-
-restore
-
 
 
 
@@ -1219,146 +1229,148 @@ restore
 *********************************************
 
 
-
-preserve
-
-
-keep if gender==1
-
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen category=.
-label var category "Category"
-
-
-local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
-foreach x in `shares'{
-local l`x' : variable label `x' 
-}
-
-collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
-
-
-gen sub_sample=.
-label var sub_sample "Sub-Sample"
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-
-
-gen category=.
-label var category "Category"
-
-gen ratio_gender_gap=wages_female/wages_male
-label var ratio_gender_gap "Female to Male gender wage gap"
-
-gen ratio_sector_gap=wages_public/wages_private
-label var ratio_sector_gap "Public to Private wage gap"
-
-
-local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
-
-local excel=1
-
-
-
-count
-local y=r(N)
-local row=5	+ 2*`y'		  
-
+cap count if missing(gender)
+if _rc == 0 & (`r(N)' < `full_sample') {
 	
+	preserve
 
-tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
+
+	keep if gender==1
 
 
-forval z=1/`y'	{ 
-matrix define pop`z'=r(Stat`z')
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen category=.
+	label var category "Category"
+
+
+	local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
+	foreach x in `shares'{
+	local l`x' : variable label `x' 
+	}
+
+	collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
+
+
+	gen sub_sample=.
+	label var sub_sample "Sub-Sample"
+
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+
+
+	gen category=.
+	label var category "Category"
+
+	gen ratio_gender_gap=wages_female/wages_male
+	label var ratio_gender_gap "Female to Male gender wage gap"
+
+	gen ratio_sector_gap=wages_public/wages_private
+	label var ratio_sector_gap "Public to Private wage gap"
+
+
+	local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
+
+	local excel=1
+
+
+
+	count
+	local y=r(N)
+	local row=5	+ 2*`y'		  
+
+		
+
+	tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
+
+
+	forval z=1/`y'	{ 
+	matrix define pop`z'=r(Stat`z')
+	}
+
+	tabstat  no_pop_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define pop_no`z'=r(Stat`z')
+	}
+
+	tabstat no_lf_numb, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_no`z'=r(Stat`z')
+	}
+
+
+	tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+
+
+	tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
+			sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
+			sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
+			sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
+			sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_`z'=r(Stat`z')
+	}
+
+	tabstat mean_hours_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_no`z'=r(Stat`z')
+	}
+
+	tabstat sh_underemp sh_excemp, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_`z'=r(Stat`z')
+	}
+
+	tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wages`z'=r(Stat`z')
+	}
+
+	tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define ratio_`z'=r(Stat`z')
+	}
+
+
+	tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define edu_`z'=r(Stat`z')
+	}
+
+
+
+	forval z=1/`y'	{
+	putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
+	putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
+	putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
+	putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
+	putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
+	putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
+	putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
+	putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
+	putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
+	local ++row
+	}	
+
+	local row=5	+ 2*`y'		  
+
+
+	levels sample1
+	foreach lev in `r(levels)'{
+	use "$data/I2D2_test_${y}_red.dta", clear
+	keep if sample1=="`lev'"
+	putexcel A`row'=countryname
+	putexcel B`row'=year    
+	putexcel C`row'=sample1 
+	putexcel D`row'=sample_type
+	putexcel E`row'="Male"
+	local ++row
+	}	
+
+	restore
 }
-
-tabstat  no_pop_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define pop_no`z'=r(Stat`z')
-}
-
-tabstat no_lf_numb, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_no`z'=r(Stat`z')
-}
-
-
-tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-
-
-tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
-		sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
-		sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
-		sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
-		sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_`z'=r(Stat`z')
-}
-
-tabstat mean_hours_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_no`z'=r(Stat`z')
-}
-
-tabstat sh_underemp sh_excemp, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_`z'=r(Stat`z')
-}
-
-tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wages`z'=r(Stat`z')
-}
-
-tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
-forval z=1/`y'	{ 
-matrix define ratio_`z'=r(Stat`z')
-}
-
-
-tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
-forval z=1/`y'	{ 
-matrix define edu_`z'=r(Stat`z')
-}
-
-
-
-forval z=1/`y'	{
-putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
-putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
-putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
-putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
-putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
-putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
-putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
-putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
-putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
-local ++row
-}	
-
-local row=5	+ 2*`y'		  
-
-
-levels sample1
-foreach lev in `r(levels)'{
-use "$data/I2D2_test_${y}_red.dta", clear
-keep if sample1=="`lev'"
-putexcel A`row'=countryname
-putexcel B`row'=year    
-putexcel C`row'=sample1 
-putexcel D`row'=sample_type
-putexcel E`row'="Male"
-local ++row
-}	
-
-restore
-
 
 
 
@@ -1369,144 +1381,143 @@ restore
 ************** Female ************************
 *********************************************
 
-preserve
-
-
-keep if gender==2
-
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen category=.
-label var category "Category"
-
-
-local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
-foreach x in `shares'{
-local l`x' : variable label `x' 
-}
-
-collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
-
-
-gen sub_sample=.
-label var sub_sample "Sub-Sample"
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen ratio_gender_gap=wages_female/wages_male
-label var ratio_gender_gap "Female to Male gender wage gap"
-
-gen ratio_sector_gap=wages_public/wages_private
-label var ratio_sector_gap "Public to Private wage gap"
-
-gen category=.
-label var category "Category"
-
-local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
-
-local excel=1
-
-
-
-count
-local y=r(N)
-local row=5	+ 3*`y'		  
-
+cap count if missing(gender)
+if _rc == 0 & (`r(N)' < `full_sample') {
 	
+	preserve
 
-tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
+	keep if gender==2
 
-forval z=1/`y'	{ 
-matrix define pop`z'=r(Stat`z')
+
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen category=.
+	label var category "Category"
+
+
+	local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
+	foreach x in `shares'{
+	local l`x' : variable label `x' 
+	}
+
+	collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
+
+
+	gen sub_sample=.
+	label var sub_sample "Sub-Sample"
+
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen ratio_gender_gap=wages_female/wages_male
+	label var ratio_gender_gap "Female to Male gender wage gap"
+
+	gen ratio_sector_gap=wages_public/wages_private
+	label var ratio_sector_gap "Public to Private wage gap"
+
+	gen category=.
+	label var category "Category"
+
+	local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
+
+	local excel=1
+
+
+
+	count
+	local y=r(N)
+	local row=5	+ 3*`y'		  
+
+		
+
+	tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
+
+	forval z=1/`y'	{ 
+	matrix define pop`z'=r(Stat`z')
+	}
+
+	tabstat  no_pop_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define pop_no`z'=r(Stat`z')
+	}
+
+	tabstat no_lf_numb, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_no`z'=r(Stat`z')
+	}
+
+
+	tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+
+	tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
+			sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
+			sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
+			sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
+			sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_`z'=r(Stat`z')
+	}
+
+	tabstat mean_hours_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_no`z'=r(Stat`z')
+	}
+
+	tabstat sh_underemp sh_excemp, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_`z'=r(Stat`z')
+	}
+
+	tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wages`z'=r(Stat`z')
+	}
+
+	tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define ratio_`z'=r(Stat`z')
+	}
+
+
+	tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define edu_`z'=r(Stat`z')
+	}
+
+
+
+	forval z=1/`y'	{
+	putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
+	putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
+	putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
+	putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
+	putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
+	putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
+	putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
+	putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
+	putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
+	local ++row
+	}	
+
+	local row=5	+ 3*`y'		  
+
+
+	levels sample1
+	foreach lev in `r(levels)'{
+	use "$data/I2D2_test_${y}_red.dta", clear
+	keep if sample1=="`lev'"
+	putexcel A`row'=countryname
+	putexcel B`row'=year    
+	putexcel C`row'=sample1 
+	putexcel D`row'=sample_type
+	putexcel E`row'="Female"
+	local ++row
+	}	
+
+	restore
+
 }
-
-tabstat  no_pop_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define pop_no`z'=r(Stat`z')
-}
-
-tabstat no_lf_numb, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_no`z'=r(Stat`z')
-}
-
-
-tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-
-tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
-		sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
-		sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
-		sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
-		sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_`z'=r(Stat`z')
-}
-
-tabstat mean_hours_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_no`z'=r(Stat`z')
-}
-
-tabstat sh_underemp sh_excemp, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_`z'=r(Stat`z')
-}
-
-tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wages`z'=r(Stat`z')
-}
-
-tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
-forval z=1/`y'	{ 
-matrix define ratio_`z'=r(Stat`z')
-}
-
-
-tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
-forval z=1/`y'	{ 
-matrix define edu_`z'=r(Stat`z')
-}
-
-
-
-forval z=1/`y'	{
-putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
-putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
-putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
-putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
-putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
-putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
-putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
-putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
-putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
-local ++row
-}	
-
-local row=5	+ 3*`y'		  
-
-
-levels sample1
-foreach lev in `r(levels)'{
-use "$data/I2D2_test_${y}_red.dta", clear
-keep if sample1=="`lev'"
-putexcel A`row'=countryname
-putexcel B`row'=year    
-putexcel C`row'=sample1 
-putexcel D`row'=sample_type
-putexcel E`row'="Female"
-local ++row
-}	
-
-restore
-
-
-
-
-
 
 
 
@@ -1518,143 +1529,145 @@ restore
 *********************************************
 
 
+cap count if missing(age_x)
+if _rc == 0 & (`r(N)' < `full_sample') {
 
-preserve
-
-
-keep if age_x==1
-
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen category=.
-label var category "Category"
+	preserve
 
 
-local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
-foreach x in `shares'{
-local l`x' : variable label `x' 
+	keep if age_x==1
+
+
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen category=.
+	label var category "Category"
+
+
+	local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
+	foreach x in `shares'{
+	local l`x' : variable label `x' 
+	}
+
+	collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
+
+
+	gen sub_sample=.
+	label var sub_sample "Sub-Sample"
+
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen ratio_gender_gap=wages_female/wages_male
+	label var ratio_gender_gap "Female to Male gender wage gap"
+
+	gen ratio_sector_gap=wages_public/wages_private
+	label var ratio_sector_gap "Public to Private wage gap"
+
+	gen category=.
+	label var category "Category"
+
+
+	local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
+
+	local excel=1
+
+
+
+	count
+	local y=r(N)
+	local row=5	+ 4*`y'		  
+
+		
+
+	tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
+
+
+	forval z=1/`y'	{ 
+	matrix define pop`z'=r(Stat`z')
+	}
+
+	tabstat  no_pop_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define pop_no`z'=r(Stat`z')
+	}
+
+	tabstat no_lf_numb, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_no`z'=r(Stat`z')
+	}
+
+
+	tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+
+	tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
+			sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
+			sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
+			sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
+			sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_`z'=r(Stat`z')
+	}
+
+	tabstat mean_hours_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_no`z'=r(Stat`z')
+	}
+
+	tabstat sh_underemp sh_excemp, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_`z'=r(Stat`z')
+	}
+
+	tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wages`z'=r(Stat`z')
+	}
+
+	tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define ratio_`z'=r(Stat`z')
+	}
+
+
+	tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define edu_`z'=r(Stat`z')
+	}
+
+
+
+	forval z=1/`y'	{
+	putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
+	putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
+	putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
+	putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
+	putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
+	putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
+	putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
+	putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
+	putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
+	local ++row
+	}	
+
+	local row=5	+ 4*`y'		  
+
+
+	levels sample1
+	foreach lev in `r(levels)'{
+	use "$data/I2D2_test_${y}_red.dta", clear
+	keep if sample1=="`lev'"
+	putexcel A`row'=countryname
+	putexcel B`row'=year    
+	putexcel C`row'=sample1 
+	putexcel D`row'=sample_type
+	putexcel E`row'="Young Worker"
+	local ++row
+	}	
+
+	restore
 }
-
-collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
-
-
-gen sub_sample=.
-label var sub_sample "Sub-Sample"
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen ratio_gender_gap=wages_female/wages_male
-label var ratio_gender_gap "Female to Male gender wage gap"
-
-gen ratio_sector_gap=wages_public/wages_private
-label var ratio_sector_gap "Public to Private wage gap"
-
-gen category=.
-label var category "Category"
-
-
-local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
-
-local excel=1
-
-
-
-count
-local y=r(N)
-local row=5	+ 4*`y'		  
-
-	
-
-tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
-
-
-forval z=1/`y'	{ 
-matrix define pop`z'=r(Stat`z')
-}
-
-tabstat  no_pop_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define pop_no`z'=r(Stat`z')
-}
-
-tabstat no_lf_numb, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_no`z'=r(Stat`z')
-}
-
-
-tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-
-tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
-		sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
-		sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
-		sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
-		sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_`z'=r(Stat`z')
-}
-
-tabstat mean_hours_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_no`z'=r(Stat`z')
-}
-
-tabstat sh_underemp sh_excemp, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_`z'=r(Stat`z')
-}
-
-tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wages`z'=r(Stat`z')
-}
-
-tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
-forval z=1/`y'	{ 
-matrix define ratio_`z'=r(Stat`z')
-}
-
-
-tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
-forval z=1/`y'	{ 
-matrix define edu_`z'=r(Stat`z')
-}
-
-
-
-forval z=1/`y'	{
-putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
-putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
-putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
-putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
-putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
-putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
-putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
-putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
-putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
-local ++row
-}	
-
-local row=5	+ 4*`y'		  
-
-
-levels sample1
-foreach lev in `r(levels)'{
-use "$data/I2D2_test_${y}_red.dta", clear
-keep if sample1=="`lev'"
-putexcel A`row'=countryname
-putexcel B`row'=year    
-putexcel C`row'=sample1 
-putexcel D`row'=sample_type
-putexcel E`row'="Young Worker"
-local ++row
-}	
-
-restore
-
 
 
 
@@ -1663,145 +1676,147 @@ restore
 ************** Old Worker *****************
 *********************************************
 
-
-preserve
-
-
-keep if age_x==2
-
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen category=.
-label var category "Category"
-
-
-local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
-foreach x in `shares'{
-local l`x' : variable label `x' 
-}
-
-collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
-
-
-gen sub_sample=.
-label var sub_sample "Sub-Sample"
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen ratio_gender_gap=wages_female/wages_male
-label var ratio_gender_gap "Female to Male gender wage gap"
-
-gen ratio_sector_gap=wages_public/wages_private
-label var ratio_sector_gap "Public to Private wage gap"
-
-gen category=.
-label var category "Category"
-
-
-local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
-
-local excel=1
-
-
-
-
-count
-local y=r(N)
-local row=5	+ 5*`y'		  
-
+cap count if missing(age_x)
+if _rc == 0 & (`r(N)' < `full_sample') {
 	
+	preserve
 
-tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
+
+	keep if age_x==2
 
 
-forval z=1/`y'	{ 
-matrix define pop`z'=r(Stat`z')
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen category=.
+	label var category "Category"
+
+
+	local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
+	foreach x in `shares'{
+	local l`x' : variable label `x' 
+	}
+
+	collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
+
+
+	gen sub_sample=.
+	label var sub_sample "Sub-Sample"
+
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen ratio_gender_gap=wages_female/wages_male
+	label var ratio_gender_gap "Female to Male gender wage gap"
+
+	gen ratio_sector_gap=wages_public/wages_private
+	label var ratio_sector_gap "Public to Private wage gap"
+
+	gen category=.
+	label var category "Category"
+
+
+	local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
+
+	local excel=1
+
+
+
+
+	count
+	local y=r(N)
+	local row=5	+ 5*`y'		  
+
+		
+
+	tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
+
+
+	forval z=1/`y'	{ 
+	matrix define pop`z'=r(Stat`z')
+	}
+
+	tabstat  no_pop_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define pop_no`z'=r(Stat`z')
+	}
+
+	tabstat no_lf_numb, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_no`z'=r(Stat`z')
+	}
+
+
+	tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+
+	tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
+			sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
+			sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
+			sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
+			sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_`z'=r(Stat`z')
+	}
+
+	tabstat mean_hours_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_no`z'=r(Stat`z')
+	}
+
+	tabstat sh_underemp sh_excemp, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_`z'=r(Stat`z')
+	}
+
+	tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
+
+	forval z=1/`y'	{ 
+	matrix define wages`z'=r(Stat`z')
+	}
+
+	tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define ratio_`z'=r(Stat`z')
+	}
+
+
+	tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define edu_`z'=r(Stat`z')
+	}
+
+
+
+	forval z=1/`y'	{
+	putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
+	putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
+	putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
+	putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
+	putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
+	putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
+	putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
+	putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
+	putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
+	local ++row
+	}	
+
+	local row=5	+ 5*`y'		  
+
+
+	levels sample1
+	foreach lev in `r(levels)'{
+	use "$data/I2D2_test_${y}_red.dta", clear
+	keep if sample1=="`lev'"
+	putexcel A`row'=countryname
+	putexcel B`row'=year    
+	putexcel C`row'=sample1 
+	putexcel D`row'=sample_type
+	putexcel E`row'="Old worker"
+	local ++row
+	}	
+
+	restore
 }
-
-tabstat  no_pop_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define pop_no`z'=r(Stat`z')
-}
-
-tabstat no_lf_numb, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_no`z'=r(Stat`z')
-}
-
-
-tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-
-tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
-		sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
-		sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
-		sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
-		sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_`z'=r(Stat`z')
-}
-
-tabstat mean_hours_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_no`z'=r(Stat`z')
-}
-
-tabstat sh_underemp sh_excemp, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_`z'=r(Stat`z')
-}
-
-tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
-
-forval z=1/`y'	{ 
-matrix define wages`z'=r(Stat`z')
-}
-
-tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
-forval z=1/`y'	{ 
-matrix define ratio_`z'=r(Stat`z')
-}
-
-
-tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
-forval z=1/`y'	{ 
-matrix define edu_`z'=r(Stat`z')
-}
-
-
-
-forval z=1/`y'	{
-putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
-putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
-putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
-putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
-putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
-putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
-putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
-putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
-putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
-local ++row
-}	
-
-local row=5	+ 5*`y'		  
-
-
-levels sample1
-foreach lev in `r(levels)'{
-use "$data/I2D2_test_${y}_red.dta", clear
-keep if sample1=="`lev'"
-putexcel A`row'=countryname
-putexcel B`row'=year    
-putexcel C`row'=sample1 
-putexcel D`row'=sample_type
-putexcel E`row'="Old worker"
-local ++row
-}	
-
-restore
-
 
 
 
@@ -1812,143 +1827,145 @@ restore
 ************** Less educated*****************
 *********************************************
 
-
-preserve
-
-
-keep if low_edu==1
-
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen category=.
-label var category "Category"
-
-
-local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
-foreach x in `shares'{
-local l`x' : variable label `x' 
-}
-
-collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
-
-
-gen sub_sample=.
-label var sub_sample "Sub-Sample"
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen ratio_gender_gap=wages_female/wages_male
-label var ratio_gender_gap "Female to Male gender wage gap"
-
-gen ratio_sector_gap=wages_public/wages_private
-label var ratio_sector_gap "Public to Private wage gap"
-
-gen category=.
-label var category "Category"
-
-
-local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
-
-local excel=1
-
-
-count
-local y=r(N)
-local row=5	+ 6*`y'		  
-
+cap count if missing(low_edu)
+if _rc == 0 & (`r(N)' < `full_sample') {
 	
+	preserve
 
-tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
+
+	keep if low_edu==1
 
 
-forval z=1/`y'	{ 
-matrix define pop`z'=r(Stat`z')
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen category=.
+	label var category "Category"
+
+
+	local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
+	foreach x in `shares'{
+	local l`x' : variable label `x' 
+	}
+
+	collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
+
+
+	gen sub_sample=.
+	label var sub_sample "Sub-Sample"
+
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen ratio_gender_gap=wages_female/wages_male
+	label var ratio_gender_gap "Female to Male gender wage gap"
+
+	gen ratio_sector_gap=wages_public/wages_private
+	label var ratio_sector_gap "Public to Private wage gap"
+
+	gen category=.
+	label var category "Category"
+
+
+	local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
+
+	local excel=1
+
+
+	count
+	local y=r(N)
+	local row=5	+ 6*`y'		  
+
+		
+
+	tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
+
+
+	forval z=1/`y'	{ 
+	matrix define pop`z'=r(Stat`z')
+	}
+
+	tabstat  no_pop_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define pop_no`z'=r(Stat`z')
+	}
+
+	tabstat no_lf_numb, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_no`z'=r(Stat`z')
+	}
+
+
+	tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+
+	tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
+			sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
+			sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
+			sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
+			sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_`z'=r(Stat`z')
+	}
+
+	tabstat mean_hours_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_no`z'=r(Stat`z')
+	}
+
+	tabstat sh_underemp sh_excemp, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_`z'=r(Stat`z')
+	}
+
+	tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
+
+	forval z=1/`y'	{ 
+	matrix define wages`z'=r(Stat`z')
+	}
+
+	tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define ratio_`z'=r(Stat`z')
+	}
+
+
+	tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define edu_`z'=r(Stat`z')
+	}
+
+
+
+	forval z=1/`y'	{
+	putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
+	putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
+	putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
+	putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
+	putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
+	putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
+	putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
+	putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
+	putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
+	local ++row
+	}	
+
+	local row=5	+ 6*`y'		  
+
+
+	levels sample1
+	foreach lev in `r(levels)'{
+	use "$data/I2D2_test_${y}_red.dta", clear
+	keep if sample1=="`lev'"
+	putexcel A`row'=countryname
+	putexcel B`row'=year    
+	putexcel C`row'=sample1 
+	putexcel D`row'=sample_type
+	putexcel E`row'="Lower education"
+	local ++row
+	}	
+
+	restore
 }
-
-tabstat  no_pop_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define pop_no`z'=r(Stat`z')
-}
-
-tabstat no_lf_numb, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_no`z'=r(Stat`z')
-}
-
-
-tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-
-tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
-		sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
-		sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
-		sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
-		sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_`z'=r(Stat`z')
-}
-
-tabstat mean_hours_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_no`z'=r(Stat`z')
-}
-
-tabstat sh_underemp sh_excemp, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_`z'=r(Stat`z')
-}
-
-tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
-
-forval z=1/`y'	{ 
-matrix define wages`z'=r(Stat`z')
-}
-
-tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
-forval z=1/`y'	{ 
-matrix define ratio_`z'=r(Stat`z')
-}
-
-
-tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
-forval z=1/`y'	{ 
-matrix define edu_`z'=r(Stat`z')
-}
-
-
-
-forval z=1/`y'	{
-putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
-putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
-putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
-putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
-putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
-putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
-putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
-putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
-putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
-local ++row
-}	
-
-local row=5	+ 6*`y'		  
-
-
-levels sample1
-foreach lev in `r(levels)'{
-use "$data/I2D2_test_${y}_red.dta", clear
-keep if sample1=="`lev'"
-putexcel A`row'=countryname
-putexcel B`row'=year    
-putexcel C`row'=sample1 
-putexcel D`row'=sample_type
-putexcel E`row'="Lower education"
-local ++row
-}	
-
-restore
-
 
 
 
@@ -1956,145 +1973,147 @@ restore
 ************** High educated*****************
 *********************************************
 
-
-preserve
-
-
-keep if low_edu==0
-
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen category=.
-label var category "Category"
-
-
-local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
-foreach x in `shares'{
-local l`x' : variable label `x' 
-}
-
-collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
-
-
-gen sub_sample=.
-label var sub_sample "Sub-Sample"
-
-gen sample_type=.
-label var sample_type "Survey Type"
-
-gen ratio_gender_gap=wages_female/wages_male
-label var ratio_gender_gap "Female to Male gender wage gap"
-
-gen ratio_sector_gap=wages_public/wages_private
-label var ratio_sector_gap "Public to Private wage gap"
-
-
-gen category=.
-label var category "Category"
-
-
-
-local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
-
-local excel=1
-
-count
-local y=r(N)
-local row=5	+ 7*`y'		  
-
+cap count if missing(low_edu)
+if _rc == 0 & (`r(N)' < `full_sample') {
 	
-
-tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
-
-
-forval z=1/`y'	{ 
-matrix define pop`z'=r(Stat`z')
-}
-
-tabstat  no_pop_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define pop_no`z'=r(Stat`z')
-}
-
-tabstat no_lf_numb, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_no`z'=r(Stat`z')
-}
+	preserve
 
 
-tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-
-tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
-		sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
-		sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
-		sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
-		sh_occup_eleme_ sh_occup_armed_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define lf_`z'=r(Stat`z')
-}
-
-tabstat mean_hours_, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_no`z'=r(Stat`z')
-}
-
-tabstat sh_underemp sh_excemp, by(sample1) save
-forval z=1/`y'	{ 
-matrix define wo_`z'=r(Stat`z')
-}
-
-tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
-
-forval z=1/`y'	{ 
-matrix define wages`z'=r(Stat`z')
-}
-
-tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
-forval z=1/`y'	{ 
-matrix define ratio_`z'=r(Stat`z')
-}
+	keep if low_edu==0
 
 
-tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
-forval z=1/`y'	{ 
-matrix define edu_`z'=r(Stat`z')
-}
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen category=.
+	label var category "Category"
+
+
+	local shares "countryname  year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ sh_formal_con_ sh_UnSe_ sh_formal_health_ sh_formal_socialsec_	wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd"
+	foreach x in `shares'{
+	local l`x' : variable label `x' 
+	}
+
+	collapse (count) no_* (mean) sh_*  mean_hours_ (median) wages_* [pw=wgt], by(countryname year sample1)
+
+
+	gen sub_sample=.
+	label var sub_sample "Sub-Sample"
+
+	gen sample_type=.
+	label var sample_type "Survey Type"
+
+	gen ratio_gender_gap=wages_female/wages_male
+	label var ratio_gender_gap "Female to Male gender wage gap"
+
+	gen ratio_sector_gap=wages_public/wages_private
+	label var ratio_sector_gap "Public to Private wage gap"
+
+
+	gen category=.
+	label var category "Category"
 
 
 
-forval z=1/`y'	{
-putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
-putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
-putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
-putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
-putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
-putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
-putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
-putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
-putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
-local ++row
-}	
+	local shares "countryname year sample1 sample_type category no_pop_ sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old no_lf_numb sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_ mean_hours_ sh_underemp sh_excemp 	  wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd ratio_gender_gap ratio_sector_gap sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ "
 
-local row=5	+ 7*`y'		  
+	local excel=1
+
+	count
+	local y=r(N)
+	local row=5	+ 7*`y'		  
+
+		
+
+	tabstat sh_child_ sh_youth_  sh_adult_  sh_elderly_  sh_urb_ sh_wap_ sh_dependency sh_dependency_youth sh_dependency_old, by(sample1) save
 
 
-levels sample1
-foreach lev in `r(levels)'{
-use "$data/I2D2_test_${y}_red.dta", clear
-keep if sample1=="`lev'"
-putexcel A`row'=countryname
-putexcel B`row'=year    
-putexcel C`row'=sample1 
-putexcel D`row'=sample_type
-putexcel E`row'="Higher education"
-local ++row
-}	
+	forval z=1/`y'	{ 
+	matrix define pop`z'=r(Stat`z')
+	}
 
-restore
+	tabstat  no_pop_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define pop_no`z'=r(Stat`z')
+	}
+
+	tabstat no_lf_numb, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_no`z'=r(Stat`z')
+	}
+
+
+	tabstat sh_lf_ sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young sh_wage_ sh_self_ sh_unpaid_ sh_emps_ sh_informal_ sh_formal_ sh_formal_miss_  sh_pub_ sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs  sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+
+	tabstat sh_lf_  sh_lf_fem sh_nlfe_young sh_empl_ sh_secondary sh_empr_all  sh_unempr_all sh_empr_young sh_unempr_young  sh_wage_ ///
+			sh_self_ sh_unpaid_ sh_emps_  sh_UnSe_ sh_informal_ sh_formal_ sh_formal_miss_  sh_formal_con_ sh_formal_health_ sh_formal_socialsec_ sh_pub_ ///
+			sh_agr_ sh_ind_ sh_serv_ sh_nonagr_women sh_nonagr_youth sh_ind_min 	sh_ind_manu sh_ind_pub sh_ind_cons sh_serv_com sh_serv_trans sh_serv_fbs ///
+			sh_serv_pa sh_serv_rest sh_occup_senior_ sh_occup_prof_ sh_occup_techn_ sh_occup_clerk_ sh_occup_servi_ sh_occup_skillagr_ sh_occup_craft_ sh_occup_machi_ ///
+			sh_occup_eleme_ sh_occup_armed_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define lf_`z'=r(Stat`z')
+	}
+
+	tabstat mean_hours_, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_no`z'=r(Stat`z')
+	}
+
+	tabstat sh_underemp sh_excemp, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define wo_`z'=r(Stat`z')
+	}
+
+	tabstat wages_hourly_def  wages_monthly_def wages_monthly_def_agri wages_monthly_def_indu wages_monthly_def_serv wages_hourly_def_real wages_hourly_usd wages_monthly_def_real wages_monthly_usd, by(sample1) save
+
+	forval z=1/`y'	{ 
+	matrix define wages`z'=r(Stat`z')
+	}
+
+	tabstat  ratio_gender_gap ratio_sector_gap , by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define ratio_`z'=r(Stat`z')
+	}
+
+
+	tabstat  sh_no_educ sh_prim_educ sh_sec_educ sh_postsec_educ, by(sample1) save
+	forval z=1/`y'	{ 
+	matrix define edu_`z'=r(Stat`z')
+	}
+
+
+
+	forval z=1/`y'	{
+	putexcel F`row'=matrix(pop_no`z'), nformat(number_sep)
+	putexcel G`row'=matrix(pop`z'), nformat(percent_d2)
+	putexcel P`row'=matrix(lf_no`z'), nformat(number_sep)
+	putexcel Q`row'=matrix(lf_`z'), nformat(percent_d2)
+	putexcel BJ`row'=matrix(wo_no`z'), nformat (number_sep) 
+	putexcel BK`row'=matrix(wo_`z'), nformat(percent_d2) 
+	putexcel BM`row'=matrix(wages`z'), nformat (number_sep) 
+	putexcel BV`row'=matrix(ratio_`z'), nformat(percent_d2) 
+	putexcel BX`row'=matrix(edu_`z'), nformat(percent_d2)  
+	local ++row
+	}	
+
+	local row=5	+ 7*`y'		  
+
+
+	levels sample1
+	foreach lev in `r(levels)'{
+	use "$data/I2D2_test_${y}_red.dta", clear
+	keep if sample1=="`lev'"
+	putexcel A`row'=countryname
+	putexcel B`row'=year    
+	putexcel C`row'=sample1 
+	putexcel D`row'=sample_type
+	putexcel E`row'="Higher education"
+	local ++row
+	}	
+
+	restore
 	 
-	 
+}	 
 	 
 	 
 	 
@@ -2487,7 +2506,7 @@ putexcel C23="Following ICSE-93 an Employer is a business owner (whether alone o
 putexcel C23:Z24, merge left txtwrap
 
 putexcel A25="Self-employment", bold
-putexcel C25="Following ICSE-93 own account or self-employment includes jobs where remuneration is directly dependent from the goods and service produced (where home consumption is considered to be part of the profits) and have not engaged any permanent employees to work for them on a continuous basis during the reference period. Contrary to ICSE-93 members of producers’ cooperatives are not a category of their own but regarded as self-employed."   
+putexcel C25="Following ICSE-93 own account or self-employment includes jobs where remuneration is directly dependent from the goods and service produced (where home consumption is considered to be part of the profits) and have not engaged any permanent employees to work for them on a continuous basis during the reference period. Contrary to ICSE-93 members of producers' cooperatives are not a category of their own but regarded as self-employed."   
 putexcel C25:Z27, merge left txtwrap
 
 
@@ -2532,7 +2551,7 @@ putexcel C49="Underemployment is defined as a situation when the hours of work o
 putexcel C49:Z50, merge left txtwrap
 
 putexcel A51="Excessive working hours", bold
-putexcel C51="We follow ILO that states that: Most countries have statutory limits of weekly working hours of 48 hours or less, and the hours actually worked per week in most countries are less than the 48-hour standard established in ILO conventions. These limits serve to promote higher productivity while safeguarding workers’ physical and mental health."
+putexcel C51="We follow ILO that states that: Most countries have statutory limits of weekly working hours of 48 hours or less, and the hours actually worked per week in most countries are less than the 48-hour standard established in ILO conventions. These limits serve to promote higher productivity while safeguarding workers' physical and mental health."
 putexcel C51:Z52, merge left txtwrap
 
 putexcel A53="Earnings", bold
@@ -2554,7 +2573,7 @@ putexcel A59:H59, merge hcenter vcenter txtwrap
 
 
 putexcel A61="Education", bold
-putexcel C61="The variable is country specific as not all countries require the same number of school years to complete a given level. Primary completed implies that one completed the stipulated primary education by undertaking an exam or test, where this exists. Otherwise, refers to having completed the highest grade in this level of education. Post secondary  complete refers to teachers’ colleges, one or two-year programs of technical nature and include university educational level. University education level refers to any higher education after successfully completing secondary level of education regardless of whether this was completed.  This includes university, and graduate studies." 
+putexcel C61="The variable is country specific as not all countries require the same number of school years to complete a given level. Primary completed implies that one completed the stipulated primary education by undertaking an exam or test, where this exists. Otherwise, refers to having completed the highest grade in this level of education. Post secondary  complete refers to teachers' colleges, one or two-year programs of technical nature and include university educational level. University education level refers to any higher education after successfully completing secondary level of education regardless of whether this was completed.  This includes university, and graduate studies." 
 putexcel C61:Z63, merge left txtwrap
 
 
@@ -3082,4 +3101,3 @@ dis as result `" The indicator file has now been created and stored in "$indicat
 
 
 end
-
