@@ -14,7 +14,9 @@ The Jobs Country Labor Tool (JCLT) provides standardized labor force survey anal
 
 To obtain the latest version through GitHub, from the main window in Stata, run:
 
-``net describe Labor-Tool, from("https://raw.githubusercontent.com/worldbank/Jobs-Diagnostic/main/Labor-Tool")``
+```
+net install Labor-Tool, replace from("https://raw.githubusercontent.com/worldbank/Jobs-Diagnostic/main/Jobs%20Country%20Labor%20Tool") 
+```
 
 After download, install in Stata the Installation files.
 
