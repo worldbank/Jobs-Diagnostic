@@ -520,14 +520,13 @@ bys year: egen nonmissing_`var'=count(`var')
 if nonmissing_wagewrk!=0 & nonmissing_nonwagewrk!=0 & nonmissing_empstat!=0  & nonmissing_age!=0 & nonmissing_gender!=0 & nonmissing_married!=0 & nonmissing_urb!=0 & nonmissing_edulevelSEL!=0 & nonmissing_hhsize!=0 & nonmissing_reg01!=0  & nonmissing_industry!=0{
   
 
-
+* Table running have "by" options that newer Stata versions may give an error. They are not used further
+* We may want to delete it, for now I comment it out.
 table edulevelSEL age_x urb [pw=wgt], by(gender) format(%9.3f) sc col row
-
 table edulevelSEL age_x urb [pw=wgt], by(gender) c(mean wage_vs_nonwage) format(%9.3f) sc col row
-
 table wage_vs_nonwage edulevelSEL [pw=wgt], format(%9.2f) center row col
  
- eststo clear
+eststo clear
  
 probit wage_vs_nonwage age age2 i.gender i.married i.urb i.edulevelSEL i.industry hhsize i.reg01 if $condALL [iweight=wgt], vce(robust)
 est sto coe_wage_nonwage`n'
@@ -921,15 +920,25 @@ gen sex="Female" if gender==2
 replace sex="Male" if gender==1
 
 if nonmissing_wages!=0 &  nonmissing_empstat!=0 & nonmissing_age!=0 & nonmissing_gender!=0  & nonmissing_urb!=0 & nonmissing_edulevelSEL!=0 & nonmissing_occup!=0 & nonmissing_industry!=0 {
-    
-oaxaca lnwage empstat age urb edulevelSEL  [aweight=wgt], by(sex) 
-outreg2 using "Blinder_Decomposition_`lev'.xls",  replace ctitle(Model 1) addnote(The decomposition uses the Oaxaca package by Ben Jann. An interpretation of the threefold decomposition is given on page 468-469 in the related Stata journal article., The first column for each model reports the differential and the second column the decomposition., The first model uses employment status age residency area and education level as input variables. The second model adds industry sector. The third model adds occupations to model 2.)
 
-oaxaca lnwage empstat age urb edulevelSEL industry [aweight=wgt], by(sex) 
-outreg2 using "Blinder_Decomposition_`lev'.xls",  append ctitle(Model 2) 
+* Run Oaxaca Blinder Regressions. However it may fail in some cases, so ensure it skips if error.
+* Run three models by adding elements
+cap oaxaca lnwage empstat age urb edulevelSEL  [aweight=wgt], by(sex) 
+if _rc == 0 {	
+	outreg2 using "Blinder_Decomposition_`lev'.xls",  replace ctitle(Model 1) addnote(The decomposition uses the Oaxaca package by Ben Jann. An interpretation of the threefold decomposition is given on page 468-469 in the related Stata journal article., The first column for each model reports the differential and the second column the decomposition., The first model uses employment status age residency area and education level as input variables. The second model adds industry sector. The third model adds occupations to model 2.)
+}
 
-oaxaca lnwage empstat age urb edulevelSEL industry occup [aweight=wgt], by(sex) 
-outreg2 using "Blinder_Decomposition_`lev'.xls",  append ctitle(Model 3)
+cap oaxaca lnwage empstat age urb edulevelSEL industry [aweight=wgt], by(sex) 
+if _rc == 0 {
+	outreg2 using "Blinder_Decomposition_`lev'.xls",  append ctitle(Model 2) 
+}
+
+
+cap oaxaca lnwage empstat age urb edulevelSEL industry occup [aweight=wgt], by(sex) 
+if _rc == 0 {
+	outreg2 using "Blinder_Decomposition_`lev'.xls",  append ctitle(Model 3)
+}
+
 }
 
 else {
