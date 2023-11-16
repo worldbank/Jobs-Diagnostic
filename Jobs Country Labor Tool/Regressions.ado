@@ -815,16 +815,21 @@ local fix_reg_sx "age age2 i.edulevelSEL i.urb i.reg01"
 
 eststo clear
 
-	
+** Regressions might not work for smaller samples, use capture
+cap sqreg lwage `fix_reg' if $condALL, q(.25 .5 .75)
+if _rc == 0 {
+	est store QOLS1_all`n', nocopy
+}
 
-sqreg lwage `fix_reg' if $condALL, q(.25 .5 .75)
-est store QOLS1_all`n', nocopy
 
 	
 		if nonmissing_industry!=0{
 
-sqreg lwage `fix_reg' i.industry_x if $condALL, q(.25 .5 .75)
-est store QOLS2_all`n', nocopy
+	cap sqreg lwage `fix_reg' i.industry_x if $condALL, q(.25 .5 .75)
+	if _rc == 0 {
+		est store QOLS2_all`n', nocopy
+	}
+
 
 	}
 else {
@@ -834,8 +839,11 @@ di "industry is missing in year `lev'"
 	
 		if nonmissing_occup!=0 & nonmissing_industry!=0{
 
-sqreg lwage `fix_reg' i.industry_x b6.occup if $condALL, q(.25 .5 .75)
-est store QOLS3_all`n', nocopy		
+	cap sqreg lwage `fix_reg' i.industry_x b6.occup if $condALL, q(.25 .5 .75)
+	if _rc == 0 {
+		est store QOLS3_all`n', nocopy	
+	}
+	
 	}
 	
 else {
@@ -845,8 +853,11 @@ di "industry and/or occup is missing in year `lev'"
 	
 		if nonmissing_industry!=0{
 
-sqreg lwage `fix_reg' i.industry if $condALL, q(.25 .5 .75)
-est store QOLS4_all`n', nocopy
+	cap sqreg lwage `fix_reg' i.industry if $condALL, q(.25 .5 .75)
+	if _rc == 0 {
+		est store QOLS4_all`n', nocopy
+	}
+
 		
 	}
 else {
@@ -855,29 +866,39 @@ di "industry is missing in year `lev'"
 		
 		
 	if nonmissing_ocusec!=0 {
-sqreg lwage `fix_reg' i.ocusec if $condALL, q(.25 .5 .75)
-est store QOLS5_all`n', nocopy
+		
+	cap sqreg lwage `fix_reg' i.ocusec if $condALL, q(.25 .5 .75)
+	if _rc == 0 {
+		est store QOLS5_all`n', nocopy
+	}
+
 }
 else {
 di "ocusec is missing in year `lev'"
 }
 
 	if nonmissing_informal!=0 {
-sqreg lwage `fix_reg' i.informal if $condALL, q(.25 .5 .75)
-est store QOLS6_all`n', nocopy
+
+	cap sqreg lwage `fix_reg' i.informal if $condALL, q(.25 .5 .75)
+	if _rc == 0 {
+		est store QOLS6_all`n', nocopy
+	}
+
 }
 else {
 di "informal is missing in year `lev'"
 }
 
 if nonmissing_contract!=0 {
-sqreg lwage `fix_reg' i.no_contract if $condALL, q(.25 .5 .75)
-est store QOLS7_all`n', nocopy
+	cap sqreg lwage `fix_reg' i.no_contract if $condALL, q(.25 .5 .75)
+	if _rc == 0 {
+		est store QOLS7_all`n', nocopy
+	}
+
 }
 else {
 di "contract is missing in year `lev'"
-}
-	
+}	
 	
 esttab QOLS*`n' using "Quantile_estimation_`lev'.csv", replace compress nogap label nonumbers  ////
 mtitle("Model 1"  "Model 2" "Model 3" "Model 4 - All Sample" "Model 5 - All Sample" "Model 6 - All Sample" "Model 7 - All Sample") ////
