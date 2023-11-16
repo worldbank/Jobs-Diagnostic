@@ -522,9 +522,9 @@ if nonmissing_wagewrk!=0 & nonmissing_nonwagewrk!=0 & nonmissing_empstat!=0  & n
 
 * Table running have "by" options that newer Stata versions may give an error. They are not used further
 * We may want to delete it, for now I comment it out.
-table edulevelSEL age_x urb [pw=wgt], by(gender) format(%9.3f) sc col row
-table edulevelSEL age_x urb [pw=wgt], by(gender) c(mean wage_vs_nonwage) format(%9.3f) sc col row
-table wage_vs_nonwage edulevelSEL [pw=wgt], format(%9.2f) center row col
+* table edulevelSEL age_x urb [pw=wgt], by(gender) format(%9.3f) sc col row
+* table edulevelSEL age_x urb [pw=wgt], by(gender) c(mean wage_vs_nonwage) format(%9.3f) sc col row
+* table wage_vs_nonwage edulevelSEL [pw=wgt], format(%9.2f) center row col
  
 eststo clear
  
